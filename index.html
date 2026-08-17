@@ -62,34 +62,7 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 </div>
 
 <script>
-const STREAMERS = [
-  {name:"灰泽满Hazel", color:"#D3D3D3", avatar:"photo/Hazel.jpg", live:"https://b23.tv/0JAnyGj", space:"https://b23.tv/3AHwUJ1", schedule:{
-    MON:[], TUE:[["16:00","18:00",""],["20:00","22:00",""]],
-    WED:[["20:00","22:00","游戏"]], THU:[["11:30","13:30",""]],
-    FRI:[["21:00","23:00",""]], SAT:[[null,null,"待定"]], SUN:[["21:00","23:00",""]]}},
-  {name:"四时小路Komichi", color:"#FF2231", avatar:"photo/Komichi.jpg", live:"https://b23.tv/xuFCKTc", space:"https://b23.tv/DY8ETAE", schedule:{
-    MON:[["08:00","10:00","音乐电台"],["21:00","23:00","杂谈"]],
-    TUE:[["21:00","23:00","提问箱回"]], WED:[["20:00","22:00","小歌一下"]],
-    THU:[["08:30","10:30","杂谈"]], FRI:[["21:00","23:00","魔女之家"]],
-    SAT:[["10:00","12:00","万言堂代笔工坊"],["19:30","21:30","小歌一下"]], SUN:[[null,null,"休"]]}},
-  {name:"小松绿Viridis", color:"#8EB056", avatar:"photo/Viridis.jpg", live:"https://b23.tv/aZNKyp3", space:"https://b23.tv/UIq2wIL", schedule:{
-    MON:[["19:00","21:00","杂谈之"]], TUE:[["19:00","21:00","中v歌回"]],
-    WED:[["19:00","21:00","看看视频，吗？"]], THU:[["19:00","21:00","游戏！节奏天国！"]],
-    FRI:[["19:00","21:00","聊聊行道树"]], SAT:[["12:00","14:00","歌？杂？"]], SUN:[]}},
-  {name:"枝堇Sumire", color:"#B4A6BF", avatar:"photo/Sumire.jpg", live:"https://b23.tv/QjLdUeT", space:"https://b23.tv/ohyp2dm", schedule:{
-    MON:[["08:00","10:00","早台读书"],["16:00","18:00","杂谈"]],
-    TUE:[["12:00","14:00","午台"],["22:00","00:00","电台"]], WED:[["13:00","15:00","午台"]],
-    THU:[[null,null,"随机假"]], FRI:[["10:00","12:00","早台"],["20:00","22:00","神秘歌杂"]],
-    SAT:[["13:00","15:00","午台"],["24:00","02:00","夜谈"]], SUN:[["19:00","21:00","联动"]]}},
-  {name:"羽啾chu2u", color:"#D4DA7B", avatar:"photo/chu2u.jpg", live:"https://b23.tv/89Hv7Xn", space:"https://b23.tv/EuoNF8j", schedule:{
-    MON:[["14:00","16:00","外星歌杂"],["22:00","00:00","外星杂谈"]],
-    TUE:[[null,null,"休息！备一下邮箱！"],[null,null,"周日前请将动漫喜好表投递"]],
-    WED:[["14:00","16:00","宇宙杂谈"],["22:00","00:00","来听外星见谈"]],
-    THU:[["14:00","16:00","外星歌杂"],["22:00","00:00","外星杂谈"]],
-    FRI:[["14:00","16:00","外星歌杂"],["22:00","00:00","宇宙电台"]],
-    SAT:[["14:00","16:00","宇宙歌杂"],["22:00","00:00","小众动漫提问箱"]],
-    SUN:[["19:00","21:00","联动捡垃圾"],[null,null,"休息！准备周日晚的故事"]]}}
-];
+const STREAMERS = [{"name": "灰泽满Hazel", "color": "#D3D3D3", "avatar": "photo/Hazel.jpg", "live": "https://b23.tv/0JAnyGj", "space": "https://b23.tv/3AHwUJ1", "schedule": {"MON": [], "TUE": [], "WED": [], "THU": [], "FRI": [], "SAT": [], "SUN": []}}, {"name": "四时小路Komichi", "color": "#FF2231", "avatar": "photo/Komichi.jpg", "live": "https://b23.tv/xuFCKTc", "space": "https://b23.tv/DY8ETAE", "schedule": {"MON": [], "TUE": [], "WED": [], "THU": [], "FRI": [], "SAT": [], "SUN": []}}, {"name": "小松绿Viridis", "color": "#8EB056", "avatar": "photo/Viridis.jpg", "live": "https://b23.tv/aZNKyp3", "space": "https://b23.tv/UIq2wIL", "schedule": {"MON": [], "TUE": [], "WED": [], "THU": [], "FRI": [], "SAT": [], "SUN": []}}, {"name": "枝堇Sumire", "color": "#B4A6BF", "avatar": "photo/Sumire.jpg", "live": "https://b23.tv/QjLdUeT", "space": "https://b23.tv/ohyp2dm", "schedule": {"MON": [], "TUE": [], "WED": [], "THU": [], "FRI": [], "SAT": [], "SUN": []}}, {"name": "羽啾chu2u", "color": "#D4DA7B", "avatar": "photo/chu2u.jpg", "live": "https://b23.tv/89Hv7Xn", "space": "https://b23.tv/EuoNF8j", "schedule": {"MON": [], "TUE": [], "WED": [], "THU": [], "FRI": [], "SAT": [], "SUN": []}}];
 
 const DAY_KEYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 const DAY_LABELS = ["周一","周二","周三","周四","周五","周六","周日"];
