@@ -37,6 +37,25 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:#5f5e5a}
 .legend a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#5f5e5a}
 .legend img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+.view-toggle{display:flex;gap:8px;margin:16px 0 0}
+.view-toggle button{border:1px solid #d3d1c7;background:#fff;border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s}
+.view-toggle button:hover{border-color:#888780}
+.view-toggle button.active{background:#2c2c2a;color:#fff;border-color:#2c2c2a}
+.week-board{background:#fff;border:1px solid #e5e3da;border-radius:12px;overflow-x:auto;margin-top:0}
+.wv-head{display:grid;grid-template-columns:70px repeat(5,1fr);border-bottom:1px solid #e5e3da;min-width:560px}
+.wv-head .th{padding:10px 6px;text-align:center;font-size:13px;font-weight:600}
+.wv-head .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:#2c2c2a}
+.wv-row{display:grid;grid-template-columns:70px repeat(5,1fr);min-width:560px;border-bottom:1px solid #f0eee8}
+.wv-row:last-child{border-bottom:none}
+.wv-row.wv-today{background:#faf9f5}
+.wv-day{padding:10px 6px;text-align:center;border-right:1px solid #e5e3da;display:flex;flex-direction:column;justify-content:center;font-size:13px;font-weight:600;color:#2c2c2a}
+.wv-day .d{font-size:11px;color:#888780;font-weight:400;margin-top:3px}
+.wv-cell{padding:6px;display:flex;flex-direction:column;gap:6px;justify-content:center;min-height:60px;border-left:1px solid #f0eee8}
+.wv-slot{border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;line-height:1.35;cursor:pointer;transition:filter .15s}
+.wv-slot:hover{filter:brightness(.93)}
+.wv-slot .tm{font-size:11px;opacity:.8;font-weight:500}
+.wv-slot .tp{font-size:13px;font-weight:500;word-break:break-all}
+.wv-empty{color:#c9c7be;font-size:12px;text-align:center}
 @media (max-width:640px){
   body{padding:14px 8px 40px}
   h1{font-size:17px}
@@ -54,9 +73,14 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 <body>
 <div class="wrap">
   <h1>灰泽满＆287 共享周表</h1>
-  <div class="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空</div>
+  <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空</div>
+  <div class="view-toggle">
+    <button id="btnDay" class="active">日视图</button>
+    <button id="btnWeek">周总览</button>
+  </div>
   <div class="dates" id="dates"></div>
   <div class="board" id="board"></div>
+  <div class="week-board" id="weekBoard" style="display:none"></div>
   <div class="legend" id="legend"></div>
   <div class="note">说明：色块按直播的精确开始/结束时间定位（分钟级），点击色块跳转直播间，点击头像跳转个人空间。时间标在色块内上方小字。</div>
 </div>
@@ -156,10 +180,58 @@ function renderBoard(){
   el.innerHTML = html;
 }
 
+function renderWeek(){
+  const el = document.getElementById("weekBoard");
+  const days = weekDays();
+  let html = '<div class="wv-head"><div class="th"></div>';
+  STREAMERS.forEach(s=>{
+    html += '<div class="th"><a class="av" href="'+s.space+'" target="_blank" title="'+s.name+' 个人空间"><img src="'+s.avatar+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>';
+  });
+  html += '</div>';
+  days.forEach(d=>{
+    html += '<div class="wv-row'+(d.isToday?' wv-today':'')+'"><div class="wv-day">'+d.label+'<span class="d">'+d.mmdd+'</span></div>';
+    STREAMERS.forEach(s=>{
+      const slots = (s.schedule[d.key]||[]);
+      html += '<div class="wv-cell">';
+      if(slots.length===0){
+        html += '<span class="wv-empty">休</span>';
+      } else {
+        slots.forEach(x=>{
+          const tc = textColor(s.color);
+          html += '<div class="wv-slot" onclick="window.open(\''+s.live+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="background:'+s.color+';color:'+tc+'">'
+                + '<span class="tm">'+(x[0]?x[0]:'待定')+'</span>'
+                + (x[2] ? '<span class="tp">'+x[2]+'</span>' : '')
+                + '</div>';
+        });
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  el.innerHTML = html;
+}
+
+let currentView = "day";
+function setView(v){
+  currentView = v;
+  document.getElementById("btnDay").classList.toggle("active", v==="day");
+  document.getElementById("btnWeek").classList.toggle("active", v==="week");
+  document.getElementById("dates").style.display = (v==="day") ? "" : "none";
+  document.getElementById("board").style.display = (v==="day") ? "" : "none";
+  document.getElementById("weekBoard").style.display = (v==="week") ? "" : "none";
+  document.getElementById("sub").textContent = (v==="day")
+    ? "横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空"
+    : "横轴主播 · 纵轴周一至周日 · 整周总览 · 空 = 休息留空";
+  if(v==="week") renderWeek();
+}
+
 const days = weekDays();
+document.getElementById("btnDay").onclick = ()=>setView("day");
+document.getElementById("btnWeek").onclick = ()=>setView("week");
 renderDates(days);
 renderLegend();
 renderBoard();
+setView("day");
 </script>
 </body>
 </html>
