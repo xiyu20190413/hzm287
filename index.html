@@ -18,27 +18,33 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 .dates button.active .d{color:#d3d1c7}
 .board{background:#fff;border:1px solid #e5e3da;border-radius:12px;overflow-x:auto}
 .head-row{display:grid;grid-template-columns:56px repeat(5,1fr);border-bottom:1px solid #e5e3da;min-width:560px}
-.head-row .th{padding:12px 6px;text-align:center;font-size:13px;font-weight:600}
-.head-row .th .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle;border:.5px solid rgba(0,0,0,.15)}
+.head-row .th{padding:10px 6px;text-align:center;font-size:13px;font-weight:600}
+.av{display:inline-block;text-decoration:none;line-height:0}
+.av img{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);transition:transform .15s}
+.av:hover img{transform:scale(1.08)}
+.head-row .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:#2c2c2a}
 .grid{position:relative;display:grid;grid-template-columns:56px repeat(5,1fr);min-width:560px}
 .gridlines{position:absolute;left:56px;right:0;top:0;bottom:0;pointer-events:none;z-index:0}
 .gridlines i{position:absolute;left:0;right:0;height:1px;background:#f0eee8}
 .time-axis{position:relative;height:800px;border-right:1px solid #e5e3da;z-index:1}
 .time-axis span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:#888780;white-space:nowrap}
 .col{position:relative;height:800px;border-left:1px solid #f0eee8;z-index:1}
-.blk{position:absolute;left:4px;right:4px;border-radius:8px;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;line-height:1.35;overflow:hidden}
+.blk{position:absolute;left:4px;right:4px;border-radius:8px;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;line-height:1.35;overflow:hidden;cursor:pointer;transition:filter .15s}
+.blk:hover{filter:brightness(.93)}
 .blk .tm{font-size:11px;opacity:.8;font-weight:500}
 .blk .tp{font-size:14px;font-weight:500;word-break:break-all}
 .note{font-size:12px;color:#888780;margin-top:14px;line-height:1.7}
-.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:#5f5e5a}
-.legend span{display:inline-flex;align-items:center;gap:5px}
-.legend .dot{width:9px;height:9px;border-radius:50%;display:inline-block;border:.5px solid rgba(0,0,0,.15)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:#5f5e5a}
+.legend a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#5f5e5a}
+.legend img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 @media (max-width:640px){
   body{padding:14px 8px 40px}
   h1{font-size:17px}
   .sub{font-size:12px}
   .dates button{padding:6px 9px;font-size:12px}
   .head-row .th{font-size:11px;padding:8px 3px}
+  .av img{width:36px;height:36px}
+  .head-row .th .nm{font-size:11px}
   .time-axis span{font-size:10px}
   .blk .tp{font-size:12px}
   .blk .tm{font-size:10px}
@@ -52,30 +58,30 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
   <div class="dates" id="dates"></div>
   <div class="board" id="board"></div>
   <div class="legend" id="legend"></div>
-  <div class="note">说明：色块按直播的精确开始/结束时间定位（分钟级），可能跨格。时间标在色块内上方小字。</div>
+  <div class="note">说明：色块按直播的精确开始/结束时间定位（分钟级），点击色块跳转直播间，点击头像跳转个人空间。时间标在色块内上方小字。</div>
 </div>
 
 <script>
 const STREAMERS = [
-  {name:"灰泽满Hazel", color:"#D3D3D3", schedule:{
+  {name:"灰泽满Hazel", color:"#D3D3D3", avatar:"photo/Hazel.jpg", live:"https://b23.tv/0JAnyGj", space:"https://b23.tv/3AHwUJ1", schedule:{
     MON:[], TUE:[["16:00","18:00",""],["20:00","22:00",""]],
     WED:[["20:00","22:00","游戏"]], THU:[["11:30","13:30",""]],
     FRI:[["21:00","23:00",""]], SAT:[[null,null,"待定"]], SUN:[["21:00","23:00",""]]}},
-  {name:"四时小路Komichi", color:"#FF2231", schedule:{
+  {name:"四时小路Komichi", color:"#FF2231", avatar:"photo/Komichi.jpg", live:"https://b23.tv/xuFCKTc", space:"https://b23.tv/DY8ETAE", schedule:{
     MON:[["08:00","10:00","音乐电台"],["21:00","23:00","杂谈"]],
     TUE:[["21:00","23:00","提问箱回"]], WED:[["20:00","22:00","小歌一下"]],
     THU:[["08:30","10:30","杂谈"]], FRI:[["21:00","23:00","魔女之家"]],
     SAT:[["10:00","12:00","万言堂代笔工坊"],["19:30","21:30","小歌一下"]], SUN:[[null,null,"休"]]}},
-  {name:"小松绿Viridis", color:"#8EB056", schedule:{
+  {name:"小松绿Viridis", color:"#8EB056", avatar:"photo/Viridis.jpg", live:"https://b23.tv/aZNKyp3", space:"https://b23.tv/UIq2wIL", schedule:{
     MON:[["19:00","21:00","杂谈之"]], TUE:[["19:00","21:00","中v歌回"]],
     WED:[["19:00","21:00","看看视频，吗？"]], THU:[["19:00","21:00","游戏！节奏天国！"]],
     FRI:[["19:00","21:00","聊聊行道树"]], SAT:[["12:00","14:00","歌？杂？"]], SUN:[]}},
-  {name:"枝堇Sumire", color:"#B4A6BF", schedule:{
+  {name:"枝堇Sumire", color:"#B4A6BF", avatar:"photo/Sumire.jpg", live:"https://b23.tv/QjLdUeT", space:"https://b23.tv/ohyp2dm", schedule:{
     MON:[["08:00","10:00","早台读书"],["16:00","18:00","杂谈"]],
     TUE:[["12:00","14:00","午台"],["22:00","00:00","电台"]], WED:[["13:00","15:00","午台"]],
     THU:[[null,null,"随机假"]], FRI:[["10:00","12:00","早台"],["20:00","22:00","神秘歌杂"]],
     SAT:[["13:00","15:00","午台"],["24:00","02:00","夜谈"]], SUN:[["19:00","21:00","联动"]]}},
-  {name:"羽啾chu2u", color:"#D4DA7B", schedule:{
+  {name:"羽啾chu2u", color:"#D4DA7B", avatar:"photo/chu2u.jpg", live:"https://b23.tv/89Hv7Xn", space:"https://b23.tv/EuoNF8j", schedule:{
     MON:[["14:00","16:00","外星歌杂"],["22:00","00:00","外星杂谈"]],
     TUE:[[null,null,"休息！备一下邮箱！"],[null,null,"周日前请将动漫喜好表投递"]],
     WED:[["14:00","16:00","宇宙杂谈"],["22:00","00:00","来听外星见谈"]],
@@ -89,15 +95,15 @@ const DAY_KEYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 const DAY_LABELS = ["周一","周二","周三","周四","周五","周六","周日"];
 const HOURS = ["06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","24:00"];
 
-const AXIS_START = 6;      // 时间轴起点 06:00
-const AXIS_END = 26;       // 时间轴终点 次日 02:00（容纳跨天时段）
-const PX_PER_HOUR = 40;    // 每小时像素
-const AXIS_H = (AXIS_END - AXIS_START) * PX_PER_HOUR; // 800
+const AXIS_START = 6;
+const AXIS_END = 26;
+const PX_PER_HOUR = 40;
+const AXIS_H = (AXIS_END - AXIS_START) * PX_PER_HOUR;
 
 function toHours(t){
   const p = t.split(":").map(Number);
   let hh = p[0] + p[1]/60;
-  if (hh < 6) hh += 24;    // 凌晨时段视为次日
+  if (hh < 6) hh += 24;
   return hh;
 }
 function textColor(hex){
@@ -133,13 +139,13 @@ function renderDates(days){
 }
 function renderLegend(){
   const el = document.getElementById("legend");
-  el.innerHTML = STREAMERS.map(s=>'<span><span class="dot" style="background:'+s.color+'"></span>'+s.name.replace(/[A-Z].*/,"")+"</span>").join("");
+  el.innerHTML = STREAMERS.map(s=>'<a href="'+s.space+'" target="_blank"><img src="'+s.avatar+'" alt="'+s.name+'">'+s.name.replace(/[A-Z].*/,"")+"</a>").join("");
 }
 function renderBoard(){
   const el = document.getElementById("board");
   let html = '<div class="head-row"><div class="th"></div>';
   STREAMERS.forEach(s=>{
-    html += '<div class="th"><span class="dot" style="background:'+s.color+'"></span>'+s.name+'</div>';
+    html += '<div class="th"><a class="av" href="'+s.space+'" target="_blank" title="'+s.name+' 个人空间"><img src="'+s.avatar+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>';
   });
   html += '</div><div class="grid">';
 
@@ -165,7 +171,7 @@ function renderBoard(){
       const top = (startH - AXIS_START) * PX_PER_HOUR;
       const height = Math.max((endH - startH) * PX_PER_HOUR - 3, 22);
       const tc = textColor(s.color);
-      html += '<div class="blk" style="top:'+top+'px;height:'+height+'px;background:'+s.color+';color:'+tc+'">'
+      html += '<div class="blk" onclick="window.open(\''+s.live+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="top:'+top+'px;height:'+height+'px;background:'+s.color+';color:'+tc+'">'
             + '<span class="tm">'+x[0]+'</span>'
             + (x[2] ? '<span class="tp">'+x[2]+'</span>' : '')
             + '</div>';
