@@ -6,74 +6,201 @@
 <title>灰泽满＆287 共享周表</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f4f0;color:#2c2c2a;padding:24px 20px 60px}
+:root{
+  --bg:#f5f4f0;--card:#fff;--line:#e5e3da;--line2:#f0eee8;
+  --ink:#2c2c2a;--ink2:#888780;--ink3:#c9c7be;--btn:#d3d1c7;
+  --ok:#5f8f3f;--warn:#c78a2b;--err:#c94f4f;
+}
+body{
+  font-family:-apple-system,"Microsoft YaHei","PingFang SC",sans-serif;
+  background:var(--bg);color:var(--ink);padding:24px 20px 60px;
+  transition:background .2s;
+}
 .wrap{max-width:960px;margin:0 auto}
+
+/* 顶部 */
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
 h1{font-size:20px;font-weight:600;letter-spacing:.5px}
-.sub{font-size:13px;color:#888780;margin-top:4px}
+.sub{font-size:13px;color:var(--ink2);margin-top:4px}
+.top-actions{display:flex;gap:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--btn);background:var(--card);border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s;line-height:1;font-family:inherit}
+.btn:hover{border-color:var(--ink2)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.primary:hover{border-color:var(--ink)}
+.btn.danger{color:#c94f4f;border-color:#e7c7c7}
+.btn svg{width:15px;height:15px;flex-shrink:0}
+
+/* 日期/视图切换 */
 .dates{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 16px}
-.dates button{border:1px solid #d3d1c7;background:#fff;border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s}
-.dates button:hover{border-color:#888780}
-.dates button .d{font-size:11px;color:#888780;display:block;margin-top:2px}
-.dates button.active{background:#2c2c2a;color:#fff;border-color:#2c2c2a}
-.dates button.active .d{color:#d3d1c7}
-.board{background:#fff;border:1px solid #e5e3da;border-radius:12px;overflow-x:auto}
-.head-row{display:grid;grid-template-columns:56px repeat(5,1fr);border-bottom:1px solid #e5e3da;min-width:560px}
+.dates button{border:1px solid var(--btn);background:var(--card);border-radius:10px;padding:8px 12px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s;font-family:inherit}
+.dates button:hover{border-color:var(--ink2)}
+.dates button .d{font-size:11px;color:var(--ink2);display:block;margin-top:2px}
+.dates button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.dates button.active .d{color:var(--btn)}
+.view-toggle{display:flex;gap:8px;margin:0 0 0}
+.view-toggle button{border:1px solid var(--btn);background:var(--card);border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s;font-family:inherit}
+.view-toggle button:hover{border-color:var(--ink2)}
+.view-toggle button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* 周表看板 */
+.board{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto}
+.head-row{display:grid;border-bottom:1px solid var(--line);min-width:560px}
 .head-row .th{padding:10px 6px;text-align:center;font-size:13px;font-weight:600}
 .av{display:inline-block;text-decoration:none;line-height:0}
-.av img{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);transition:transform .15s}
+.av img{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12);transition:transform .15s;background:#eee}
 .av:hover img{transform:scale(1.08)}
-.head-row .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:#2c2c2a}
-.grid{position:relative;display:grid;grid-template-columns:56px repeat(5,1fr);min-width:560px}
+.head-row .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:var(--ink)}
+.grid{position:relative;display:grid;min-width:560px}
 .gridlines{position:absolute;left:56px;right:0;top:0;bottom:0;pointer-events:none;z-index:0}
-.gridlines i{position:absolute;left:0;right:0;height:1px;background:#f0eee8}
-.time-axis{position:relative;height:800px;border-right:1px solid #e5e3da;z-index:1}
-.time-axis span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:#888780;white-space:nowrap}
-.col{position:relative;height:800px;border-left:1px solid #f0eee8;z-index:1}
+.gridlines i{position:absolute;left:0;right:0;height:1px;background:var(--line2)}
+.time-axis{position:relative;height:800px;border-right:1px solid var(--line);z-index:1}
+.time-axis span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:var(--ink2);white-space:nowrap}
+.col{position:relative;height:800px;border-left:1px solid var(--line2);z-index:1}
 .blk{position:absolute;left:4px;right:4px;border-radius:8px;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;line-height:1.35;overflow:hidden;cursor:pointer;transition:filter .15s}
 .blk:hover{filter:brightness(.93)}
 .blk .tm{font-size:11px;opacity:.8;font-weight:500}
 .blk .tp{font-size:14px;font-weight:500;word-break:break-all}
-.note{font-size:12px;color:#888780;margin-top:14px;line-height:1.7}
 .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:12px;color:#5f5e5a}
 .legend a{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:#5f5e5a}
-.legend img{width:26px;height:26px;border-radius:50%;object-fit:cover}
-.view-toggle{display:flex;gap:8px;margin:16px 0 0}
-.view-toggle button{border:1px solid #d3d1c7;background:#fff;border-radius:10px;padding:8px 16px;font-size:13px;cursor:pointer;color:#444441;transition:all .15s}
-.view-toggle button:hover{border-color:#888780}
-.view-toggle button.active{background:#2c2c2a;color:#fff;border-color:#2c2c2a}
-.week-board{background:#fff;border:1px solid #e5e3da;border-radius:12px;overflow-x:auto;margin-top:0}
-.wv-head{display:grid;grid-template-columns:70px repeat(5,1fr);border-bottom:1px solid #e5e3da;min-width:560px}
+.legend img{width:26px;height:26px;border-radius:50%;object-fit:cover;background:#eee}
+.week-board{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-x:auto;margin-top:0}
+.wv-head{display:grid;border-bottom:1px solid var(--line);min-width:560px}
 .wv-head .th{padding:10px 6px;text-align:center;font-size:13px;font-weight:600}
-.wv-head .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:#2c2c2a}
-.wv-row{display:grid;grid-template-columns:70px repeat(5,1fr);min-width:560px;border-bottom:1px solid #f0eee8}
+.wv-head .th .nm{display:block;font-size:12px;margin-top:5px;font-weight:500;color:var(--ink)}
+.wv-row{display:grid;min-width:560px;border-bottom:1px solid var(--line2)}
 .wv-row:last-child{border-bottom:none}
 .wv-row.wv-today{background:#faf9f5}
-.wv-day{padding:10px 6px;text-align:center;border-right:1px solid #e5e3da;display:flex;flex-direction:column;justify-content:center;font-size:13px;font-weight:600;color:#2c2c2a}
-.wv-day .d{font-size:11px;color:#888780;font-weight:400;margin-top:3px}
-.wv-cell{padding:6px;display:flex;flex-direction:column;gap:6px;justify-content:center;min-height:60px;border-left:1px solid #f0eee8}
+.wv-day{padding:10px 6px;text-align:center;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;font-size:13px;font-weight:600;color:var(--ink)}
+.wv-day .d{font-size:11px;color:var(--ink2);font-weight:400;margin-top:3px}
+.wv-cell{padding:6px;display:flex;flex-direction:column;gap:6px;justify-content:center;min-height:60px;border-left:1px solid var(--line2)}
 .wv-slot{border-radius:8px;padding:6px 8px;display:flex;flex-direction:column;line-height:1.35;cursor:pointer;transition:filter .15s}
 .wv-slot:hover{filter:brightness(.93)}
 .wv-slot .tm{font-size:11px;opacity:.8;font-weight:500}
 .wv-slot .tp{font-size:13px;font-weight:500;word-break:break-all}
-.wv-empty{color:#c9c7be;font-size:12px;text-align:center}
+.wv-empty{color:var(--ink3);font-size:12px;text-align:center}
+.note{font-size:12px;color:var(--ink2);margin-top:14px;line-height:1.7}
+.note .tag{color:#c94f4f}
+
+/* ============ 管理面板 ============ */
+.admin{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;overflow:hidden}
+.admin-inner{display:flex;height:100vh}
+.admin-side{width:232px;background:#faf9f6;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:24px 16px;gap:20px;flex-shrink:0}
+.admin-brand{padding:0 8px}
+.admin-brand .t{font-size:17px;font-weight:700}
+.admin-brand .s{font-size:12px;color:var(--ink2);margin-top:4px}
+.admin-nav{display:flex;flex-direction:column;gap:4px}
+.admin-nav button{display:flex;align-items:center;gap:10px;border:none;background:none;border-radius:10px;padding:11px 12px;font-size:14px;cursor:pointer;color:#444441;text-align:left;font-family:inherit;transition:all .12s;width:100%}
+.admin-nav button:hover{background:#efede6}
+.admin-nav button.active{background:var(--ink);color:#fff}
+.admin-nav button svg{width:18px;height:18px;flex-shrink:0}
+.admin-nav .spacer{flex-grow:1}
+.admin-data{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:16px}
+.admin-data button{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--btn);background:var(--card);border-radius:10px;padding:9px;font-size:13px;cursor:pointer;color:#444441;font-family:inherit}
+.admin-data button:hover{border-color:var(--ink2)}
+
+.admin-main{flex:1;overflow-y:auto;padding:32px 36px}
+.admin-panel{max-width:960px}
+.admin-panel h2{font-size:22px;font-weight:700}
+.admin-panel .desc{font-size:13px;color:var(--ink2);margin-top:4px;margin-bottom:20px}
+.panel-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.panel-card .card-title{font-size:15px;font-weight:600;margin-bottom:14px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--ink);margin-bottom:6px}
+.field .hint{font-size:11px;color:var(--ink2);margin-top:4px}
+.inp{width:100%;border:1px solid var(--btn);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--ink);background:var(--card);font-family:inherit}
+.inp:focus{outline:none;border-color:var(--ink)}
+.inp-row{display:flex;gap:8px;align-items:center}
+.inp-row .sep{color:var(--ink2);font-size:13px}
+select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5l3-3' stroke='%23888780' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.color-inp{width:42px;height:34px;border:1px solid var(--btn);border-radius:8px;padding:2px;background:var(--card);cursor:pointer}
+.btn-row{display:flex;gap:8px;align-items:center;margin-top:4px}
+
+/* 主播卡片（管理） */
+.sm-list{display:flex;flex-direction:column;gap:12px}
+.sm-card{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--card)}
+.sm-card .av-img{width:48px;height:48px;border-radius:50%;object-fit:cover;background:#eee;flex-shrink:0}
+.sm-card .info{flex:1;min-width:0}
+.sm-card .info .nm{font-size:14px;font-weight:600}
+.sm-card .info .links{font-size:12px;color:var(--ink2);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sm-card .color-dot{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2)}
+.sm-card .color-dot i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid var(--line)}
+.sm-card .ops{display:flex;gap:6px;flex-shrink:0}
+.link-btn{border:none;background:none;color:var(--ink);font-size:13px;cursor:pointer;padding:4px 6px;font-family:inherit;border-radius:6px}
+.link-btn:hover{background:#efede6}
+.link-btn.danger{color:#c94f4f}
+
+/* 周表编辑：总览网格 */
+.sch-scroll{overflow-x:auto;padding-bottom:4px}
+.sch-head{display:flex;height:26px;border-bottom:1px solid var(--line)}
+.sch-head .sch-daycol{width:56px;height:26px;flex-shrink:0;border-right:1px solid var(--line)}
+.sch-hrtrack{position:relative;flex:1;height:26px}
+.sch-hrtrack .sch-hr{position:absolute;top:6px;font-size:11px;color:var(--ink2);transform:translateX(-50%);white-space:nowrap}
+.sch-row{display:flex;position:relative;border-bottom:1px solid var(--line2)}
+.sch-row:last-child{border-bottom:none}
+.sch-row .sch-daycol{width:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border-right:1px solid var(--line)}
+.sch-row .sch-track{position:relative;height:52px;flex:1;background:repeating-linear-gradient(to right,var(--line2) 0,var(--line2) 1px,transparent 1px,transparent 64px),repeating-linear-gradient(to bottom,var(--line2) 0,var(--line2) 1px,transparent 1px,transparent 26px)}
+.sch-blk{position:absolute;top:7px;height:38px;border-radius:7px;padding:2px 6px;display:flex;flex-direction:column;justify-content:center;line-height:1.2;overflow:hidden;cursor:pointer;transition:filter .15s}
+.sch-blk:hover{filter:brightness(.92)}
+.sch-blk .tm{font-size:10px;opacity:.85;font-weight:500}
+.sch-blk .tp{font-size:12px;font-weight:500;word-break:break-all}
+.sch-blk.pending{background:#efede6;color:var(--ink2)}
+
+/* 弹框 */
+.modal-mask{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-mask.show{display:flex}
+.modal{background:var(--card);border-radius:14px;padding:22px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal .modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
+
+/* toast */
+#toasts{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{background:var(--ink);color:#fff;border-radius:10px;padding:10px 18px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);opacity:0;transform:translateY(-8px);transition:all .25s}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok{background:#4a7a35}
+.toast.warn{background:#c78a2b}
+.toast.err{background:#c94f4f}
+
+/* 背景预设 */
+.bg-presets{display:flex;gap:12px;flex-wrap:wrap}
+.bg-preset{width:100px;cursor:pointer;text-align:center}
+.bg-preset .sw{height:60px;border-radius:8px;border:2px solid transparent}
+.bg-preset.active .sw{border-color:var(--ink)}
+.bg-preset .lb{font-size:12px;color:var(--ink2);margin-top:5px}
+
+/* OCR 候选 */
+.ocr-cand{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line2)}
+.ocr-cand:last-child{border-bottom:none}
+.ocr-cand input[type=time],.ocr-cand input[type=text]{border:1px solid var(--btn);border-radius:6px;padding:6px 8px;font-size:13px;font-family:inherit;color:var(--ink)}
+.ocr-cand .t{flex:1}
+
 @media (max-width:640px){
   body{padding:14px 8px 40px}
-  h1{font-size:17px}
-  .sub{font-size:12px}
+  h1{font-size:17px}.sub{font-size:12px}
   .dates button{padding:6px 9px;font-size:12px}
   .head-row .th{font-size:11px;padding:8px 3px}
-  .av img{width:36px;height:36px}
-  .head-row .th .nm{font-size:11px}
-  .time-axis span{font-size:10px}
-  .blk .tp{font-size:12px}
-  .blk .tm{font-size:10px}
+  .av img{width:36px;height:36px}.head-row .th .nm{font-size:11px}
+  .time-axis span{font-size:10px}.blk .tp{font-size:12px}.blk .tm{font-size:10px}
+  .admin-side{width:72px;padding:16px 8px}
+  .admin-brand,.admin-nav button span,.admin-data button span{display:none}
+  .admin-nav button{justify-content:center;padding:11px}
+  .admin-main{padding:20px 14px}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>灰泽满＆287 共享周表</h1>
-  <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空</div>
+<div class="wrap" id="view">
+  <div class="topbar">
+    <div>
+      <h1>灰泽满＆287 共享周表</h1>
+      <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn" id="btnOpenAdmin">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.64 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.64a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.64a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15z"/></svg>
+        <span>自定义</span>
+      </button>
+    </div>
+  </div>
+
   <div class="view-toggle">
     <button id="btnDay" class="active">日视图</button>
     <button id="btnWeek">周总览</button>
@@ -82,156 +209,743 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
   <div class="board" id="board"></div>
   <div class="week-board" id="weekBoard" style="display:none"></div>
   <div class="legend" id="legend"></div>
-  <div class="note">说明：色块按直播的精确开始/结束时间定位（分钟级），点击色块跳转直播间，点击头像跳转个人空间。时间标在色块内上方小字。</div>
+  <div class="note">说明：色块按直播的精确开始/结束时间定位（分钟级），点击色块跳转直播间，点击头像跳转个人空间。点右上角「自定义」可增删主播、改应援色、编辑周表、换背景——改动只保存在你本机浏览器，<span class="tag">不会影响其他观众</span>。</div>
 </div>
 
+<!-- ============ 管理面板 ============ -->
+<div class="admin" id="admin">
+  <div class="admin-inner">
+    <aside class="admin-side">
+      <div class="admin-brand">
+        <div class="t">灰泽满＆287</div>
+        <div class="s">共享周表 · 自定义</div>
+      </div>
+      <nav class="admin-nav" id="adminNav">
+        <button data-p="streamers" class="active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.3 3.6-5 8-5s8 1.7 8 5"/></svg>
+          <span>主播管理</span>
+        </button>
+        <button data-p="schedule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>
+          <span>周表编辑</span>
+        </button>
+        <button data-p="import">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V5m0 0-5 5m5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+          <span>周表导入</span>
+        </button>
+        <button data-p="appearance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.5-1.3-.3-.4-.5-.8-.5-1.2 0-1.1.9-2 2-2h1.2A3.8 3.8 0 0 0 20 10.8 9 9 0 0 0 12 3z"/><circle cx="7.5" cy="11.5" r="1.3"/><circle cx="12" cy="7.5" r="1.3"/><circle cx="16.5" cy="11.5" r="1.3"/></svg>
+          <span>外观设置</span>
+        </button>
+      </nav>
+      <div class="admin-data">
+        <button id="btnExport"><span>导出配置</span></button>
+        <button id="btnImport"><span>导入配置</span></button>
+        <button id="btnReset"><span>恢复默认</span></button>
+        <button id="btnBack"><span>返回周表</span></button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <!-- 主播管理 -->
+      <section class="admin-panel" id="p-streamers">
+        <h2>主播管理</h2>
+        <div class="desc">添加、编辑主播，设置应援色与直播间链接。新增主播的周表可在「周表编辑」里手动填写。</div>
+        <div class="panel-card">
+          <div class="btn-row" style="justify-content:space-between;margin-bottom:14px">
+            <div class="card-title" style="margin:0">主播列表</div>
+            <button class="btn primary" id="btnAddStreamer">+ 添加主播</button>
+          </div>
+          <div class="sm-list" id="smList"></div>
+        </div>
+        <div class="panel-card" id="smFormCard" style="display:none">
+          <div class="card-title" id="smFormTitle">添加主播</div>
+          <input type="hidden" id="smFormIndex" value="-1">
+          <div class="field"><label>主播名</label><input class="inp" id="smName" placeholder="例：灰泽满Hazel"></div>
+          <div class="field"><label>应援色</label>
+            <div class="inp-row"><input type="color" class="color-inp" id="smColor" value="#8EB056"><input class="inp" id="smColorHex" placeholder="#8EB056" maxlength="7"></div>
+            <div class="hint">点击左侧色块选色，或直接输入十六进制色值</div>
+          </div>
+          <div class="field"><label>直播间链接（可选）</label><input class="inp" id="smLive" placeholder="https://..."></div>
+          <div class="field"><label>个人空间链接（可选）</label><input class="inp" id="smSpace" placeholder="https://..."></div>
+          <div class="field"><label>头像图片地址（可选）</label><input class="inp" id="smAvatar" placeholder="留空则用应援色圆块代替"></div>
+          <div class="btn-row">
+            <button class="btn primary" id="smSave">保存</button>
+            <button class="btn" id="smCancel">取消</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 周表编辑 -->
+      <section class="admin-panel" id="p-schedule" style="display:none">
+        <h2>周表编辑</h2>
+        <div class="desc">点击色块编辑该场直播；点右上角「+ 增加」手动录入。横轴为时间，纵轴为周一至周日。</div>
+        <div class="panel-card">
+          <div class="btn-row" style="justify-content:space-between;margin-bottom:14px">
+            <div class="inp-row">
+              <label style="font-size:13px">主播</label>
+              <select class="inp" id="schStreamer" style="max-width:200px"></select>
+            </div>
+            <button class="btn primary" id="btnAddSlot">+ 增加</button>
+          </div>
+          <div class="sch-scroll"><div id="schGrid"></div></div>
+        </div>
+      </section>
+
+      <!-- 周表导入 -->
+      <section class="admin-panel" id="p-import" style="display:none">
+        <h2>周表导入</h2>
+        <div class="desc">粘贴 JSON，或上传周表图片走浏览器端 OCR 识别。</div>
+        <div class="panel-card">
+          <div class="card-title">上传图片 OCR 识别</div>
+          <div class="btn-row">
+            <input type="file" id="ocrFile" accept="image/*" style="display:none">
+            <button class="btn primary" id="btnOcr">上传周表图片</button>
+            <span class="hint" id="ocrStatus" style="margin:0"></span>
+          </div>
+          <div class="hint" style="margin-top:8px">首次识别需联网下载 tesseract.js 及中文语言包（约 20MB），花哨排版的周表图片识别可能不准，建议识别后在下方修正。</div>
+          <div id="ocrResult" style="display:none;margin-top:14px">
+            <div class="hint" style="margin-bottom:8px">识别文本（可手动修正后点「解析时间」）：</div>
+            <textarea class="inp" id="ocrText" rows="6"></textarea>
+            <div class="btn-row" style="margin-top:12px">
+              <button class="btn" id="btnOcrParse">解析时间</button>
+            </div>
+            <div id="ocrCandidates" style="margin-top:12px"></div>
+            <div class="inp-row" style="margin-top:12px">
+              <label style="font-size:13px">统一星期</label>
+              <select class="inp" id="ocrDay" style="max-width:120px"></select>
+              <label style="font-size:13px">导入到主播</label>
+              <select class="inp" id="ocrTarget" style="max-width:200px"></select>
+              <button class="btn primary" id="btnOcrImport">导入选中</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <div class="card-title">粘贴 JSON 导入</div>
+          <textarea class="inp" id="importText" rows="8" placeholder='支持两种格式：&#10;1) 单个主播：{"name":"XX","color":"#8EB056","schedule":{"MON":[["20:00","22:00","杂谈"]]}}&#10;2) 主播数组：[{...},{...}]&#10;同名主播会合并其周表'></textarea>
+          <div class="btn-row" style="margin-top:12px">
+            <button class="btn primary" id="btnImportText">导入</button>
+          </div>
+          <div class="hint" id="importMsg" style="margin-top:10px"></div>
+        </div>
+      </section>
+
+      <!-- 外观设置 -->
+      <section class="admin-panel" id="p-appearance" style="display:none">
+        <h2>外观设置</h2>
+        <div class="desc">自定义网站背景。改动仅保存在本机浏览器。</div>
+        <div class="panel-card">
+          <div class="card-title">预设背景</div>
+          <div class="bg-presets" id="bgPresets">
+            <div class="bg-preset" data-bg="#f5f4f0"><div class="sw" style="background:#f5f4f0"></div><div class="lb">暖纸色</div></div>
+            <div class="bg-preset" data-bg="#f8e8e2"><div class="sw" style="background:#f8e8e2"></div><div class="lb">樱粉</div></div>
+            <div class="bg-preset" data-bg="#e8eef2"><div class="sw" style="background:#e8eef2"></div><div class="lb">雾蓝</div></div>
+            <div class="bg-preset" data-bg="#eef1e6"><div class="sw" style="background:#eef1e6"></div><div class="lb">抹茶</div></div>
+          </div>
+        </div>
+        <div class="panel-card">
+          <div class="card-title">自定义背景</div>
+          <div class="field"><label>自定义背景色</label>
+            <div class="inp-row"><input type="color" class="color-inp" id="bgColor" value="#f5f4f0"><input class="inp" id="bgColorHex" placeholder="#f5f4f0" maxlength="7"></div>
+          </div>
+          <div class="field"><label>背景图片（粘贴 URL 或上传图片）</label>
+            <div class="btn-row">
+              <input class="inp" id="bgImageUrl" placeholder="https://... 或本地文件">
+              <input type="file" id="bgImageFile" accept="image/*" style="display:none">
+              <button class="btn" id="btnPickImage">上传</button>
+              <button class="btn danger" id="btnClearImage">清除图片</button>
+            </div>
+          </div>
+          <div class="btn-row"><button class="btn primary" id="btnApplyBg">应用背景</button></div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- 编辑直播弹框 -->
+<div class="modal-mask" id="slotModal">
+  <div class="modal">
+    <div class="modal-title" id="slotModalTitle">编辑直播</div>
+    <input type="hidden" id="slotIndex" value="-1">
+    <div class="field"><label>日期</label>
+      <select class="inp" id="slotDaySel"></select>
+    </div>
+    <div class="field"><label>时间</label>
+      <div class="inp-row">
+        <input class="inp" id="slotStart" placeholder="开始 20:00" style="max-width:130px">
+        <span class="sep">—</span>
+        <input class="inp" id="slotEnd" placeholder="结束 22:00" style="max-width:130px">
+      </div>
+      <div class="hint">结束时间默认 = 开始时间 + 2 小时</div>
+    </div>
+    <div class="field"><label>主题</label><input class="inp" id="slotTopic" placeholder="例：联动游戏（留空则不显示）"></div>
+    <div class="btn-row" style="justify-content:space-between;margin-top:6px">
+      <button class="btn danger" id="slotDelete" style="display:none">删除</button>
+      <div style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn primary" id="slotSave">保存</button>
+        <button class="btn" id="slotCancel">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
 <script>
-const STREAMERS = [{"name": "灰泽满Hazel", "color": "#D3D3D3", "avatar": "photo/Hazel.jpg", "live": "https://b23.tv/0JAnyGj", "space": "https://b23.tv/3AHwUJ1", "schedule": {"MON": [], "TUE": [["20:00", "22:00", "游戏"]], "WED": [["20:00", "22:00", ""]], "THU": [[null, null, "待定"]], "FRI": [["20:00", "22:00", "联动游戏"]], "SAT": [["20:00", "22:00", ""]], "SUN": [[null, null, "待定"]]}}, {"name": "四时小路Komichi", "color": "#FF2231", "avatar": "photo/Komichi.jpg", "live": "https://b23.tv/xuFCKTc", "space": "https://b23.tv/DY8ETAE", "schedule": {"MON": [["08:00", "10:00", "音乐分享电台"]], "TUE": [[null, null, "派发传单中·."]], "WED": [["20:30", "22:30", "绣湖新作"]], "THU": [[null, null, "派发传单中."]], "FRI": [["20:00", "22:00", "【联动】致命公司"]], "SAT": [["15:00", "17:00", "小唱一下+3050追悼会"]], "SUN": [["19:00", "21:00", "一起看冰火"]]}}, {"name": "小松绿Viridis", "color": "#8EB056", "avatar": "photo/Viridis.jpg", "live": "https://b23.tv/aZNKyp3", "space": "https://b23.tv/UIq2wIL", "schedule": {"MON": [], "TUE": [["19:00", "21:00", "来唱歌吧"]], "WED": [["19:00", "21:00", "脑死杂谈"]], "THU": [["19:00", "21:00", "偶像主题歌回"]], "FRI": [["20:00", "22:00", "致命公司联动"]], "SAT": [], "SUN": [["19:00", "21:00", "行道树（2）"]]}}, {"name": "枝堇Sumire", "color": "#B4A6BF", "avatar": "photo/Sumire.jpg", "live": "https://b23.tv/QjLdUeT", "space": "https://b23.tv/ohyp2dm", "schedule": {"MON": [["18:00", "20:00", "杂谈"]], "TUE": [["09:00", "11:00", "早台读书"], ["22:00", "00:00", "电台"]], "WED": [["22:00", "00:00", "晚间歌杂"]], "THU": [["14:00", "16:00", "午睡回"]], "FRI": [["20:00", "22:00", "致命公司联动"]], "SAT": [["09:00", "11:00", "早台读书"]], "SUN": []}}, {"name": "羽啾chu2u", "color": "#D4DA7B", "avatar": "photo/chu2u.jpg", "live": "https://b23.tv/89Hv7Xn", "space": "https://b23.tv/EuoNF8j", "schedule": {"MON": [["14:00", "16:00", "外星杂谈"]], "TUE": [["14:00", "16:00", "外星歌杂"]], "WED": [["22:00", "00:00", "来一起过七夕"]], "THU": [["14:00", "16:00", "外星歌杂"], ["22:00", "00:00", "外星杂谈"]], "FRI": [["20:00", "22:00", "和前辈致命公司"]], "SAT": [["14:00", "16:00", "宇宙歌杂"], ["22:00", "00:00", "宇宙电台"]], "SUN": [["22:00", "00:00", "区区恐怖游戏"]]}}];
+const STREAMERS = [{"name":"灰泽满Hazel","color":"#D3D3D3","avatar":"photo/Hazel.jpg","live":"https://b23.tv/0JAnyGj","space":"https://b23.tv/3AHwUJ1","schedule":{"MON":[],"TUE":[["20:00","22:00","游戏"]],"WED":[["20:00","22:00",""]],"THU":[[null,null,"待定"]],"FRI":[["20:00","22:00","联动游戏"]],"SAT":[["20:00","22:00",""]],"SUN":[[null,null,"待定"]]}},{"name":"四时小路Komichi","color":"#FF2231","avatar":"photo/Komichi.jpg","live":"https://b23.tv/xuFCKTc","space":"https://b23.tv/DY8ETAE","schedule":{"MON":[["08:00","10:00","音乐分享电台"]],"TUE":[[null,null,"派发传单中·."]],"WED":[["20:30","22:30","绣湖新作"]],"THU":[[null,null,"派发传单中."]],"FRI":[["20:00","22:00","【联动】致命公司"]],"SAT":[["15:00","17:00","小唱一下+3050追悼会"]],"SUN":[["19:00","21:00","一起看冰火"]]}},{"name":"小松绿Viridis","color":"#8EB056","avatar":"photo/Viridis.jpg","live":"https://b23.tv/aZNKyp3","space":"https://b23.tv/UIq2wIL","schedule":{"MON":[],"TUE":[["19:00","21:00","来唱歌吧"]],"WED":[["19:00","21:00","脑死杂谈"]],"THU":[["19:00","21:00","偶像主题歌回"]],"FRI":[["20:00","22:00","致命公司联动"]],"SAT":[],"SUN":[["19:00","21:00","行道树（2）"]]}},{"name":"枝堇Sumire","color":"#B4A6BF","avatar":"photo/Sumire.jpg","live":"https://b23.tv/QjLdUeT","space":"https://b23.tv/ohyp2dm","schedule":{"MON":[["18:00","20:00","杂谈"]],"TUE":[["09:00","11:00","早台读书"],["22:00","00:00","电台"]],"WED":[["22:00","00:00","晚间歌杂"]],"THU":[["14:00","16:00","午睡回"]],"FRI":[["20:00","22:00","致命公司联动"]],"SAT":[["09:00","11:00","早台读书"]],"SUN":[]}},{"name":"羽啾chu2u","color":"#D4DA7B","avatar":"photo/chu2u.jpg","live":"https://b23.tv/89Hv7Xn","space":"https://b23.tv/EuoNF8j","schedule":{"MON":[["14:00","16:00","外星杂谈"]],"TUE":[["14:00","16:00","外星歌杂"]],"WED":[["22:00","00:00","来一起过七夕"]],"THU":[["14:00","16:00","外星歌杂"],["22:00","00:00","外星杂谈"]],"FRI":[["20:00","22:00","和前辈致命公司"]],"SAT":[["14:00","16:00","宇宙歌杂"],["22:00","00:00","宇宙电台"]],"SUN":[["22:00","00:00","区区恐怖游戏"]]}}];
 
 const DAY_KEYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 const DAY_LABELS = ["周一","周二","周三","周四","周五","周六","周日"];
 const HOURS = ["06:00","08:00","10:00","12:00","14:00","16:00","18:00","20:00","22:00","24:00"];
-
-const AXIS_START = 6;
-const AXIS_END = 26;
-const PX_PER_HOUR = 40;
+const AXIS_START = 6, AXIS_END = 26, PX_PER_HOUR = 40;
 const AXIS_H = (AXIS_END - AXIS_START) * PX_PER_HOUR;
+const LS_KEY = "hzm287_custom_v1";
+const SCH_PX = 64; /* 周表编辑网格每小时像素（1h=64px，半小时=32px） */
 
-function toHours(t){
-  const p = t.split(":").map(Number);
-  let hh = p[0] + p[1]/60;
-  if (hh < 6) hh += 24;
-  return hh;
+/* ===== 本地状态 ===== */
+let custom = loadCustom();
+function loadCustom(){ try{ const r=localStorage.getItem(LS_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
+function saveCustom(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(custom)); }catch(e){} }
+function ensureCustom(){
+  if(!custom) custom={};
+  if(!custom.streamers) custom.streamers = JSON.parse(JSON.stringify(STREAMERS));
+  if(!custom.bg) custom.bg = null;
+  saveCustom();
+  return custom;
+}
+function activeStreamers(){ return (custom && custom.streamers && custom.streamers.length) ? custom.streamers : STREAMERS; }
+
+function avatarUrl(s){
+  if(s.avatar && s.avatar.trim()) return s.avatar;
+  const c = (s.color||"#cccccc").replace("#","");
+  return "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><circle cx="40" cy="40" r="40" fill="#'+c+'"/></svg>'
+  );
 }
 function textColor(hex){
-  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  hex = (hex||"#cccccc").replace("#","");
+  if(hex.length!==6) return "#2c2c2a";
+  const r=parseInt(hex.slice(0,2),16),g=parseInt(hex.slice(2,4),16),b=parseInt(hex.slice(4,6),16);
   return (0.299*r+0.587*g+0.114*b) > 150 ? "#2c2c2a" : "#ffffff";
 }
-function weekDays(){
-  const today = new Date();
-  const day = today.getDay();
-  const mon = new Date(today);
-  mon.setDate(today.getDate() - ((day+6)%7));
-  const arr = [];
-  for(let i=0;i<7;i++){
-    const d = new Date(mon); d.setDate(mon.getDate()+i);
-    arr.push({key:DAY_KEYS[i], label:DAY_LABELS[i], date:d, mmdd:(d.getMonth()+1)+"/"+d.getDate(), isToday:i===((day+6)%7)});
-  }
-  return arr;
+function toHours(t){
+  if(t==null) return null;
+  const p=String(t).split(":").map(Number);
+  if(isNaN(p[0])) return null;
+  let hh=p[0]+p[1]/60; if(hh<6) hh+=24; return hh;
+}
+function addHours(t, h){
+  if(!t || !/^\d{1,2}:\d{2}$/.test(t)) return "";
+  const p=t.split(":").map(Number);
+  const total=(p[0]*60+p[1]+h*60)%(24*60);
+  const nh=Math.floor(total/60), nm=total%60;
+  return String(nh).padStart(2,"0")+":"+String(nm).padStart(2,"0");
+}
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ===== toast ===== */
+function toast(msg, type){
+  const el=document.createElement("div");
+  el.className="toast "+(type||"ok");
+  el.textContent=msg;
+  document.getElementById("toasts").appendChild(el);
+  requestAnimationFrame(()=>el.classList.add("show"));
+  setTimeout(()=>{ el.classList.remove("show"); setTimeout(()=>el.remove(),300); }, 2200);
 }
 
-let currentDay = null;
+/* ===== 周表渲染 ===== */
+function weekDays(){
+  const today=new Date(), day=today.getDay(), mon=new Date(today);
+  mon.setDate(today.getDate()-((day+6)%7));
+  const arr=[];
+  for(let i=0;i<7;i++){ const d=new Date(mon); d.setDate(mon.getDate()+i);
+    arr.push({key:DAY_KEYS[i],label:DAY_LABELS[i],date:d,mmdd:(d.getMonth()+1)+"/"+d.getDate(),isToday:i===((day+6)%7)});
+  } return arr;
+}
+let currentDay=null, currentView="day";
+
+function gridCols(n){ return "56px repeat("+n+",1fr)"; }
+function gridMin(n){ return 56+n*120; }
+function wvCols(n){ return "70px repeat("+n+",1fr)"; }
+function wvMin(n){ return 70+n*120; }
 
 function renderDates(days){
-  const el = document.getElementById("dates");
-  el.innerHTML = "";
+  const el=document.getElementById("dates"); el.innerHTML="";
   days.forEach((d,i)=>{
-    const b = document.createElement("button");
-    b.innerHTML = d.label + '<span class="d">'+d.mmdd+'</span>';
+    const b=document.createElement("button");
+    b.innerHTML=d.label+'<span class="d">'+d.mmdd+'</span>';
     if(d.isToday) b.classList.add("active");
-    b.onclick = ()=>{ document.querySelectorAll(".dates button").forEach(x=>x.classList.remove("active")); b.classList.add("active"); currentDay=d.key; renderBoard(); };
+    b.onclick=()=>{ document.querySelectorAll(".dates button").forEach(x=>x.classList.remove("active")); b.classList.add("active"); currentDay=d.key; renderBoard(); };
     el.appendChild(b);
   });
-  currentDay = days.find(d=>d.isToday).key;
+  currentDay=days.find(d=>d.isToday).key;
 }
 function renderLegend(){
-  const el = document.getElementById("legend");
-  el.innerHTML = STREAMERS.map(s=>'<a href="'+s.space+'" target="_blank"><img src="'+s.avatar+'" alt="'+s.name+'">'+s.name.replace(/[A-Z].*/,"")+"</a>").join("");
+  const S=activeStreamers();
+  document.getElementById("legend").innerHTML=S.map(s=>
+    '<a href="'+(s.space||"#")+'" target="_blank" rel="noopener"><img src="'+avatarUrl(s)+'" alt="'+s.name+'">'+s.name.replace(/[A-Za-z].*/,"")+"</a>"
+  ).join("");
 }
 function renderBoard(){
-  const el = document.getElementById("board");
-  let html = '<div class="head-row"><div class="th"></div>';
-  STREAMERS.forEach(s=>{
-    html += '<div class="th"><a class="av" href="'+s.space+'" target="_blank" title="'+s.name+' 个人空间"><img src="'+s.avatar+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>';
-  });
-  html += '</div><div class="grid">';
-
-  html += '<div class="gridlines">';
-  HOURS.forEach(h=>{
-    const top = (toHours(h) - AXIS_START) * PX_PER_HOUR;
-    html += '<i style="top:'+top+'px"></i>';
-  });
-  html += '</div>';
-
-  html += '<div class="time-axis">';
-  HOURS.forEach(h=>{
-    const top = (toHours(h) - AXIS_START) * PX_PER_HOUR;
-    html += '<span style="top:'+top+'px">'+h+'</span>';
-  });
-  html += '</div>';
-
-  STREAMERS.forEach(s=>{
-    html += '<div class="col">';
-    const slots = (s.schedule[currentDay]||[]).filter(x=>x[0]);
+  const S=activeStreamers(), n=S.length, el=document.getElementById("board");
+  let html='<div class="head-row" style="grid-template-columns:'+gridCols(n)+';min-width:'+gridMin(n)+'px"><div class="th"></div>';
+  S.forEach(s=>{ html+='<div class="th"><a class="av" href="'+(s.space||"#")+'" target="_blank" rel="noopener" title="'+s.name+' 个人空间"><img src="'+avatarUrl(s)+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>'; });
+  html+='</div><div class="grid" style="grid-template-columns:'+gridCols(n)+';min-width:'+gridMin(n)+'px">';
+  html+='<div class="gridlines">';
+  HOURS.forEach(h=>{ const top=(toHours(h)-AXIS_START)*PX_PER_HOUR; html+='<i style="top:'+top+'px"></i>'; });
+  html+='</div><div class="time-axis">';
+  HOURS.forEach(h=>{ const top=(toHours(h)-AXIS_START)*PX_PER_HOUR; html+='<span style="top:'+top+'px">'+h+'</span>'; });
+  html+='</div>';
+  S.forEach(s=>{
+    html+='<div class="col">';
+    const slots=(s.schedule[currentDay]||[]).filter(x=>x[0]);
     slots.forEach(x=>{
-      const startH = toHours(x[0]), endH = toHours(x[1]);
-      const top = (startH - AXIS_START) * PX_PER_HOUR;
-      const height = Math.max((endH - startH) * PX_PER_HOUR - 3, 22);
-      const tc = textColor(s.color);
-      html += '<div class="blk" onclick="window.open(\''+s.live+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="top:'+top+'px;height:'+height+'px;background:'+s.color+';color:'+tc+'">'
-            + '<span class="tm">'+x[0]+'</span>'
-            + (x[2] ? '<span class="tp">'+x[2]+'</span>' : '')
-            + '</div>';
+      const startH=toHours(x[0]), endH=toHours(x[1]);
+      const top=(startH-AXIS_START)*PX_PER_HOUR;
+      const height=Math.max((endH-startH)*PX_PER_HOUR-3,22);
+      const tc=textColor(s.color);
+      html+='<div class="blk" onclick="window.open(\''+(s.live||"#")+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="top:'+top+'px;height:'+height+'px;background:'+s.color+';color:'+tc+'">'
+        +'<span class="tm">'+x[0]+'</span>'+(x[2]?'<span class="tp">'+x[2]+'</span>':'')+'</div>';
     });
-    html += '</div>';
+    html+='</div>';
   });
-
-  html += '</div>';
-  el.innerHTML = html;
+  html+='</div>'; el.innerHTML=html;
 }
-
 function renderWeek(){
-  const el = document.getElementById("weekBoard");
-  const days = weekDays();
-  let html = '<div class="wv-head"><div class="th"></div>';
-  STREAMERS.forEach(s=>{
-    html += '<div class="th"><a class="av" href="'+s.space+'" target="_blank" title="'+s.name+' 个人空间"><img src="'+s.avatar+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>';
-  });
-  html += '</div>';
+  const S=activeStreamers(), n=S.length, el=document.getElementById("weekBoard"), days=weekDays();
+  let html='<div class="wv-head" style="grid-template-columns:'+wvCols(n)+';min-width:'+wvMin(n)+'px"><div class="th"></div>';
+  S.forEach(s=>{ html+='<div class="th"><a class="av" href="'+(s.space||"#")+'" target="_blank" rel="noopener"><img src="'+avatarUrl(s)+'" alt="'+s.name+'"></a><span class="nm">'+s.name+'</span></div>'; });
+  html+='</div>';
   days.forEach(d=>{
-    html += '<div class="wv-row'+(d.isToday?' wv-today':'')+'"><div class="wv-day">'+d.label+'<span class="d">'+d.mmdd+'</span></div>';
-    STREAMERS.forEach(s=>{
-      const slots = (s.schedule[d.key]||[]);
-      html += '<div class="wv-cell">';
-      if(slots.length===0){
-        html += '<span class="wv-empty">休</span>';
-      } else {
-        slots.forEach(x=>{
-          const tc = textColor(s.color);
-          html += '<div class="wv-slot" onclick="window.open(\''+s.live+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="background:'+s.color+';color:'+tc+'">'
-                + '<span class="tm">'+(x[0]?x[0]:'待定')+'</span>'
-                + (x[2] ? '<span class="tp">'+x[2]+'</span>' : '')
-                + '</div>';
-        });
-      }
-      html += '</div>';
+    html+='<div class="wv-row'+(d.isToday?" wv-today":"")+'" style="grid-template-columns:'+wvCols(n)+';min-width:'+wvMin(n)+'px"><div class="wv-day">'+d.label+'<span class="d">'+d.mmdd+'</span></div>';
+    S.forEach(s=>{
+      const slots=(s.schedule[d.key]||[]).filter(x=>x[0]); html+='<div class="wv-cell">';
+      if(slots.length===0){ html+='<span class="wv-empty">休</span>'; }
+      else{ slots.forEach(x=>{ const tc=textColor(s.color);
+        html+='<div class="wv-slot" onclick="window.open(\''+(s.live||"#")+'\',\'_blank\')" title="进入 '+s.name+' 直播间" style="background:'+s.color+';color:'+tc+'">'
+          +'<span class="tm">'+(x[0]?x[0]:"待定")+'</span>'+(x[2]?'<span class="tp">'+x[2]+'</span>':'')+'</div>'; }); }
+      html+='</div>';
     });
-    html += '</div>';
+    html+='</div>';
   });
-  el.innerHTML = html;
+  el.innerHTML=html;
 }
-
-let currentView = "day";
+function applyBg(){
+  const bg=custom&&custom.bg;
+  const body=document.body;
+  if(bg && bg.image){ body.style.backgroundImage='url('+bg.image+')'; body.style.backgroundSize='cover'; body.style.backgroundAttachment='fixed'; body.style.backgroundPosition='center'; body.style.backgroundColor=bg.color||'#f5f4f0'; }
+  else{ body.style.backgroundImage='none'; body.style.backgroundColor=(bg&&bg.color)?bg.color:'#f5f4f0'; }
+}
 function setView(v){
-  currentView = v;
-  document.getElementById("btnDay").classList.toggle("active", v==="day");
-  document.getElementById("btnWeek").classList.toggle("active", v==="week");
-  document.getElementById("dates").style.display = (v==="day") ? "" : "none";
-  document.getElementById("board").style.display = (v==="day") ? "" : "none";
-  document.getElementById("weekBoard").style.display = (v==="week") ? "" : "none";
-  document.getElementById("sub").textContent = (v==="day")
-    ? "横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空"
-    : "横轴主播 · 纵轴周一至周日 · 整周总览 · 空 = 休息留空";
+  currentView=v;
+  document.getElementById("btnDay").classList.toggle("active",v==="day");
+  document.getElementById("btnWeek").classList.toggle("active",v==="week");
+  document.getElementById("dates").style.display=(v==="day")?"":"none";
+  document.getElementById("board").style.display=(v==="day")?"":"none";
+  document.getElementById("weekBoard").style.display=(v==="week")?"":"none";
+  document.getElementById("sub").textContent=(v==="day")
+    ?"横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空"
+    :"横轴主播 · 纵轴周一至周日 · 整周总览 · 空 = 休息留空";
   if(v==="week") renderWeek();
 }
+function refreshAll(){ renderLegend(); renderBoard(); if(currentView==="week") renderWeek(); applyBg(); }
 
-const days = weekDays();
-document.getElementById("btnDay").onclick = ()=>setView("day");
-document.getElementById("btnWeek").onclick = ()=>setView("week");
+/* ===== 管理面板：导航 ===== */
+const adminEl=document.getElementById("admin");
+function openAdmin(){ ensureCustom(); adminEl.style.display="block"; document.body.style.overflow="hidden"; renderAdmin(); }
+function closeAdmin(){ adminEl.style.display="none"; document.body.style.overflow=""; refreshAll(); }
+document.getElementById("btnOpenAdmin").onclick=openAdmin;
+document.getElementById("btnBack").onclick=closeAdmin;
+
+const PANELS=["streamers","schedule","import","appearance"];
+function switchPanel(p){
+  document.querySelectorAll("#adminNav button").forEach(b=>b.classList.toggle("active",b.dataset.p===p));
+  PANELS.forEach(k=>{ document.getElementById("p-"+k).style.display=(k===p)?"":"none"; });
+  if(p==="streamers") renderStreamers();
+  if(p==="schedule") renderSchedule();
+  if(p==="appearance") renderAppearance();
+  if(p==="import") renderOcrTargets();
+}
+document.querySelectorAll("#adminNav button").forEach(b=>b.onclick=()=>switchPanel(b.dataset.p));
+function renderAdmin(){ switchPanel("streamers"); }
+
+/* ===== 模块1：主播管理 ===== */
+function renderStreamers(){
+  const S=ensureCustom().streamers;
+  const el=document.getElementById("smList");
+  if(!S.length){ el.innerHTML='<div class="empty">还没有主播，点右上角「+ 添加主播」开始</div>'; return; }
+  el.innerHTML=S.map((s,i)=>{
+    return '<div class="sm-card">'
+      +'<img class="av-img" src="'+avatarUrl(s)+'" alt="">'
+      +'<div class="info"><div class="nm">'+esc(s.name)+'</div>'
+      +'<div class="color-dot"><i style="background:'+s.color+'"></i>'+esc(s.color)+'</div>'
+      +'<div class="links">'+(s.live?('直播 '+esc(s.live)):"")+(s.space?(' · 空间 '+esc(s.space)):"")+'</div></div>'
+      +'<div class="ops"><button class="link-btn" onclick="editStreamer('+i+')">编辑</button><button class="link-btn danger" onclick="delStreamer('+i+')">删除</button></div>'
+      +'</div>';
+  }).join("");
+}
+function showStreamerForm(index){
+  ensureCustom();
+  const f=document.getElementById("smFormCard"); f.style.display="block";
+  document.getElementById("smFormTitle").textContent = index<0 ? "添加主播" : "编辑主播";
+  document.getElementById("smFormIndex").value=index;
+  if(index<0){
+    document.getElementById("smName").value=""; document.getElementById("smColor").value="#8EB056";
+    document.getElementById("smColorHex").value="#8EB056"; document.getElementById("smLive").value="";
+    document.getElementById("smSpace").value=""; document.getElementById("smAvatar").value="";
+  }else{
+    const s=custom.streamers[index];
+    document.getElementById("smName").value=s.name||""; document.getElementById("smColor").value=s.color||"#8EB056";
+    document.getElementById("smColorHex").value=s.color||""; document.getElementById("smLive").value=s.live||"";
+    document.getElementById("smSpace").value=s.space||""; document.getElementById("smAvatar").value=s.avatar||"";
+  }
+  f.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function editStreamer(i){ showStreamerForm(i); }
+function delStreamer(i){
+  const nm=custom.streamers[i].name;
+  if(!confirm("确定删除主播「"+nm+"」？其周表将一并删除。")) return;
+  custom.streamers.splice(i,1); saveCustom(); renderStreamers(); refreshAll();
+  toast("已删除主播「"+nm+"」");
+}
+document.getElementById("btnAddStreamer").onclick=()=>showStreamerForm(-1);
+document.getElementById("smCancel").onclick=()=>{ document.getElementById("smFormCard").style.display="none"; };
+document.getElementById("smColor").oninput=function(){ document.getElementById("smColorHex").value=this.value; };
+document.getElementById("smColorHex").oninput=function(){ const v=this.value; if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById("smColor").value=v; };
+document.getElementById("smSave").onclick=function(){
+  const name=document.getElementById("smName").value.trim();
+  if(!name){ toast("请填写主播名","warn"); return; }
+  let color=document.getElementById("smColorHex").value.trim();
+  if(!/^#[0-9a-fA-F]{6}$/.test(color)) color=document.getElementById("smColor").value;
+  const idx=parseInt(document.getElementById("smFormIndex").value,10);
+  const isEdit=idx>=0;
+  const obj={ name, color, avatar:document.getElementById("smAvatar").value.trim(),
+    live:document.getElementById("smLive").value.trim(), space:document.getElementById("smSpace").value.trim(),
+    schedule: isEdit ? custom.streamers[idx].schedule : emptySchedule() };
+  if(!isEdit){ custom.streamers.push(obj); }
+  else{ Object.assign(custom.streamers[idx], obj); }
+  saveCustom(); document.getElementById("smFormCard").style.display="none"; renderStreamers(); refreshAll();
+  toast(isEdit ? "主播信息已修改" : "主播「"+name+"」已添加");
+};
+
+/* ===== 模块2：周表编辑（总览网格 + 弹框） ===== */
+function emptySchedule(){ const o={}; DAY_KEYS.forEach(k=>o[k]=[]); return o; }
+let schStreamer=0;
+function renderSchedule(){
+  const S=ensureCustom().streamers;
+  const sel=document.getElementById("schStreamer");
+  sel.innerHTML=S.map((s,i)=>'<option value="'+i+'">'+esc(s.name)+'</option>').join("");
+  sel.value=String(schStreamer);
+  renderSchGrid();
+}
+document.getElementById("schStreamer").onchange=function(){ schStreamer=parseInt(this.value,10); renderSchGrid(); };
+
+function renderSchGrid(){
+  const S=custom.streamers;
+  if(!S.length){ document.getElementById("schGrid").innerHTML='<div class="empty">请先在「主播管理」添加主播</div>'; return; }
+  const s=S[schStreamer];
+  if(!s.schedule) s.schedule=emptySchedule();
+  const trackW=(AXIS_END-AXIS_START)*SCH_PX;
+  // 表头
+  let html='<div class="sch-head"><div class="sch-daycol"></div><div class="sch-hrtrack" style="min-width:'+trackW+'px">';
+  HOURS.forEach(h=>{ const left=(toHours(h)-AXIS_START)*SCH_PX; html+='<div class="sch-hr" style="left:'+left+'px">'+h+'</div>'; });
+  html+='</div></div>';
+  // 7 行
+  DAY_KEYS.forEach((day,di)=>{
+    html+='<div class="sch-row"><div class="sch-daycol">'+DAY_LABELS[di]+'</div><div class="sch-track" style="min-width:'+trackW+'px">';
+    const slots=s.schedule[day]||[];
+    let pendingCount=0;
+    slots.forEach((x,i)=>{
+      if(x[0] && x[1]){
+        const sh=toHours(x[0]), eh=toHours(x[1]);
+        const left=(sh-AXIS_START)*SCH_PX;
+        const w=Math.max((eh-sh)*SCH_PX-4,28);
+        html+='<div class="sch-blk" style="left:'+left+'px;width:'+w+'px;background:'+s.color+';color:'+textColor(s.color)+'" onclick="openSlot(\''+day+'\','+i+')">'
+          +'<span class="tm">'+esc(x[0])+'</span>'+(x[2]?'<span class="tp">'+esc(x[2])+'</span>':'')+'</div>';
+      } else {
+        // 待定：时间缺失的条目
+        const left=pendingCount*68;
+        html+='<div class="sch-blk pending" style="left:'+left+'px;width:60px" onclick="openSlot(\''+day+'\','+i+')"><span class="tp">待定</span></div>';
+        pendingCount++;
+      }
+    });
+    html+='</div></div>';
+  });
+  document.getElementById("schGrid").innerHTML=html;
+}
+
+function buildDayOptions(){
+  const sel=document.getElementById("slotDaySel");
+  sel.innerHTML=DAY_KEYS.map((k,i)=>'<option value="'+k+'">'+DAY_LABELS[i]+'</option>').join("");
+}
+
+function openSlot(day, index){
+  ensureCustom();
+  buildDayOptions();
+  document.getElementById("slotDaySel").value=day;
+  document.getElementById("slotIndex").value=String(index);
+  document.getElementById("slotDelete").style.display = (index>=0) ? "" : "none";
+  document.getElementById("slotModalTitle").textContent = (index>=0) ? "编辑直播" : "添加直播";
+  const dayArr=custom.streamers[schStreamer].schedule[day];
+  const x=(index>=0 && dayArr && dayArr[index]) ? dayArr[index] : null;
+  if(x){
+    document.getElementById("slotStart").value=x[0]||"";
+    document.getElementById("slotEnd").value=x[1]||"";
+    document.getElementById("slotTopic").value=x[2]||"";
+  }else{
+    document.getElementById("slotStart").value="";
+    document.getElementById("slotEnd").value="";
+    document.getElementById("slotTopic").value="";
+  }
+  document.getElementById("slotModal").classList.add("show");
+}
+function closeSlotModal(){ document.getElementById("slotModal").classList.remove("show"); }
+document.getElementById("btnAddSlot").onclick=function(){
+  const todayKey=DAY_KEYS[(new Date().getDay()+6)%7];
+  openSlot(todayKey, -1);
+};
+document.getElementById("slotCancel").onclick=closeSlotModal;
+document.getElementById("slotModal").addEventListener("click",function(e){ if(e.target===this) closeSlotModal(); });
+// 结束时间默认开始+2h
+document.getElementById("slotStart").addEventListener("change",function(){
+  if(!document.getElementById("slotEnd").value.trim()){
+    document.getElementById("slotEnd").value=addHours(this.value.trim(),2);
+  }
+});
+function overlaps(a,b){ return a[0]<b[1] && b[0]<a[1]; }
+document.getElementById("slotSave").onclick=function(){
+  const S=custom.streamers; if(!S.length) return;
+  const day=document.getElementById("slotDaySel").value;
+  const start=document.getElementById("slotStart").value.trim();
+  const end=document.getElementById("slotEnd").value.trim();
+  const topic=document.getElementById("slotTopic").value.trim();
+  if(!start && !topic){ toast("请填写时间或主题","warn"); return; }
+  const idx=parseInt(document.getElementById("slotIndex").value,10);
+  const arr=S[schStreamer].schedule[day] || (S[schStreamer].schedule[day]=[]);
+  // 冲突检测（仅当有起止时间）
+  if(start && end && /^\d{1,2}:\d{2}$/.test(start) && /^\d{1,2}:\d{2}$/.test(end)){
+    const sh=toHours(start), eh=toHours(end);
+    const oi=arr.findIndex((x,i)=>i!==idx && x[0] && x[1] && overlaps([sh,eh],[toHours(x[0]),toHours(x[1])]));
+    if(oi>=0){
+      const old=arr[oi];
+      if(!confirm("该时间段已有直播「"+(old[2]||"无主题")+"」（"+old[0]+"–"+old[1]+"），是否覆盖？")) return;
+      arr.splice(oi,1);
+      if(idx>oi) idx--;
+    }
+  }
+  const newSlot=[start||null, end||null, topic];
+  if(idx>=0 && idx<arr.length) arr[idx]=newSlot; else arr.push(newSlot);
+  saveCustom(); refreshAll(); renderSchGrid(); closeSlotModal();
+  toast("直播安排已保存");
+};
+document.getElementById("slotDelete").onclick=function(){
+  const day=document.getElementById("slotDaySel").value;
+  const idx=parseInt(document.getElementById("slotIndex").value,10);
+  if(idx<0) return;
+  custom.streamers[schStreamer].schedule[day].splice(idx,1);
+  saveCustom(); refreshAll(); renderSchGrid(); closeSlotModal();
+  toast("已删除该场直播");
+};
+
+/* ===== 模块3：周表导入 ===== */
+function renderOcrTargets(){
+  const S=ensureCustom().streamers;
+  document.getElementById("ocrTarget").innerHTML=S.map((s,i)=>'<option value="'+i+'">'+esc(s.name)+'</option>').join("");
+  const dsel=document.getElementById("ocrDay");
+  if(!dsel.options.length){ dsel.innerHTML=DAY_KEYS.map((k,i)=>'<option value="'+k+'">'+DAY_LABELS[i]+'</option>').join(""); }
+}
+
+/* -- JSON 粘贴导入 -- */
+document.getElementById("btnImportText").onclick=function(){
+  const raw=document.getElementById("importText").value.trim();
+  const msg=document.getElementById("importMsg");
+  if(!raw){ msg.textContent="请先粘贴 JSON 内容"; msg.style.color="#c94f4f"; return; }
+  let data;
+  try{ data=JSON.parse(raw); }catch(e){ msg.textContent="JSON 解析失败："+e.message; msg.style.color="#c94f4f"; return; }
+  ensureCustom();
+  let arr = Array.isArray(data) ? data : (data.streamers ? data.streamers : [data]);
+  let added=0, merged=0;
+  arr.forEach(item=>{
+    if(!item || typeof item!=="object" || !item.name){ return; }
+    const exist=custom.streamers.find(s=>s.name===item.name);
+    if(exist){
+      if(item.schedule){ exist.schedule=item.schedule; merged++; }
+      if(item.color) exist.color=item.color;
+      if(item.live) exist.live=item.live; if(item.space) exist.space=item.space;
+    }else{
+      custom.streamers.push({ name:item.name, color:item.color||"#8EB056", avatar:item.avatar||"",
+        live:item.live||"", space:item.space||"", schedule:item.schedule||emptySchedule() });
+      added++;
+    }
+  });
+  if(data.bg){ custom.bg=data.bg; }
+  saveCustom(); refreshAll();
+  msg.textContent="导入完成：新增 "+added+" 位主播，合并 "+merged+" 位周表"+(data.bg?"，已更新背景":"");
+  msg.style.color="#5f8f3f"; document.getElementById("importText").value="";
+  toast("导入完成：新增 "+added+"、合并 "+merged);
+};
+
+/* -- 图片 OCR 导入（tesseract.js） -- */
+function ensureTesseract(cb, fail){
+  if(window.Tesseract){ cb(); return; }
+  const s=document.createElement("script");
+  s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  s.onload=cb;
+  s.onerror=function(){ fail&&fail(); };
+  document.head.appendChild(s);
+}
+document.getElementById("btnOcr").onclick=function(){ document.getElementById("ocrFile").click(); };
+document.getElementById("ocrFile").onchange=function(){
+  const file=this.files[0]; if(!file) return;
+  const status=document.getElementById("ocrStatus");
+  const reader=new FileReader();
+  reader.onload=function(){
+    status.textContent="正在加载 OCR 引擎（首次需下载中文语言包约 20MB，请稍候）…";
+    ensureTesseract(async function(){
+      try{
+        const worker=await Tesseract.createWorker("chi_sim+eng");
+        const ret=await worker.recognize(reader.result);
+        await worker.terminate();
+        document.getElementById("ocrText").value=ret.data.text||"";
+        document.getElementById("ocrResult").style.display="block";
+        status.textContent="识别完成，可修正后点「解析时间」";
+        renderOcrTargets(); parseOcr();
+      }catch(e){ status.textContent="识别失败："+e.message; }
+    }, function(){
+      status.textContent="OCR 引擎加载失败（需联网加载 tesseract.js，公司网络可能受限）";
+    });
+  };
+  reader.readAsDataURL(file);
+};
+
+/* 从 OCR 文本解析时间候选 */
+function parseOcr(){
+  const text=document.getElementById("ocrText").value;
+  const box=document.getElementById("ocrCandidates");
+  const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const timeRe=/(\d{1,2})[:：](\d{2})/g;
+  const cands=[];
+  lines.forEach(line=>{
+    const times=[...line.matchAll(timeRe)].map(m=>({h:+m[1],m:+m[2]}));
+    if(!times.length) return;
+    const t1=fmt(times[0]), t2=times[1]?fmt(times[1]):addHours(t1,2);
+    const topic=line.replace(timeRe," ").replace(/\s+/g," ").trim();
+    cands.push({start:t1,end:t2,topic});
+  });
+  if(!cands.length){ box.innerHTML='<div class="empty">未识别到时间（HH:MM）。请检查文本或手动补全时间后重试。</div>'; return; }
+  box.innerHTML='<div class="card-title" style="margin:8px 0 4px">候选直播（勾选要导入的，可修改时间/主题）</div>'
+    + cands.map((c,i)=>'<div class="ocr-cand">'
+      +'<input type="checkbox" checked data-i="'+i+'">'
+      +'<input type="time" value="'+c.start+'" data-start="'+i+'">'
+      +'<span class="sep">—</span>'
+      +'<input type="time" value="'+c.end+'" data-end="'+i+'">'
+      +'<input type="text" class="t" placeholder="主题" value="'+esc(c.topic)+'" data-topic="'+i+'">'
+      +'</div>').join("");
+}
+function fmt(t){ return String(t.h).padStart(2,"0")+":"+String(t.m).padStart(2,"0"); }
+
+document.getElementById("btnOcrParse").onclick=parseOcr;
+document.getElementById("btnOcrImport").onclick=function(){
+  const S=custom.streamers; if(!S.length){ toast("请先添加主播","warn"); return; }
+  const ti=parseInt(document.getElementById("ocrTarget").value,10);
+  const day=document.getElementById("ocrDay").value;
+  const target=S[ti]; if(!target.schedule) target.schedule=emptySchedule();
+  const arr=target.schedule[day];
+  const cands=document.querySelectorAll(".ocr-cand");
+  let n=0, conflict=0;
+  cands.forEach(row=>{
+    const cb=row.querySelector("input[type=checkbox]");
+    if(!cb.checked) return;
+    const i=cb.dataset.i;
+    const start=row.querySelector('[data-start="'+i+'"]').value;
+    const end=row.querySelector('[data-end="'+i+'"]').value;
+    const topic=row.querySelector('[data-topic="'+i+'"]').value.trim();
+    if(!start && !topic) return;
+    // 冲突检测
+    if(start && end){
+      const sh=toHours(start), eh=toHours(end);
+      const oi=arr.findIndex(x=>x[0]&&x[1]&&overlaps([sh,eh],[toHours(x[0]),toHours(x[1])]));
+      if(oi>=0){ conflict++; return; } // 冲突的跳过（提示）
+    }
+    arr.push([start||null,end||null,topic]); n++;
+  });
+  saveCustom(); refreshAll();
+  toast("已导入 "+n+" 场直播"+(conflict?"，跳过 "+conflict+" 场冲突":""));
+  renderOcrTargets();
+};
+
+/* ===== 模块4：外观设置 ===== */
+function renderAppearance(){
+  const bg=custom&&custom.bg;
+  document.querySelectorAll(".bg-preset").forEach(p=>{
+    const color=p.dataset.bg;
+    p.classList.toggle("active", !!(bg && !bg.image && bg.color===color));
+  });
+  if(!bg || !bg.color){ document.getElementById("bgColor").value="#f5f4f0"; document.getElementById("bgColorHex").value="#f5f4f0"; }
+  else{ document.getElementById("bgColor").value=bg.color; document.getElementById("bgColorHex").value=bg.color; }
+  document.getElementById("bgImageUrl").value=(bg&&bg.image&&!bg.image.startsWith("data:"))?bg.image:"";
+}
+document.querySelectorAll(".bg-preset").forEach(p=>p.onclick=function(){
+  custom.bg={ color:this.dataset.bg, image:null }; saveCustom(); applyBg(); renderAppearance();
+  toast("背景已更换");
+});
+document.getElementById("bgColor").oninput=function(){ document.getElementById("bgColorHex").value=this.value; };
+document.getElementById("bgColorHex").oninput=function(){ const v=this.value; if(/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById("bgColor").value=v; };
+document.getElementById("btnPickImage").onclick=function(){ document.getElementById("bgImageFile").click(); };
+document.getElementById("bgImageFile").onchange=function(){
+  const file=this.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=function(){ document.getElementById("bgImageUrl").value=r.result; };
+  r.readAsDataURL(file);
+};
+document.getElementById("btnClearImage").onclick=function(){ document.getElementById("bgImageUrl").value=""; };
+document.getElementById("btnApplyBg").onclick=function(){
+  const url=document.getElementById("bgImageUrl").value.trim();
+  let color=document.getElementById("bgColorHex").value.trim();
+  if(!/^#[0-9a-fA-F]{6}$/.test(color)) color=document.getElementById("bgColor").value;
+  custom.bg={ color, image:url||null };
+  saveCustom(); applyBg(); renderAppearance();
+  toast("背景已应用");
+};
+
+/* ===== 导出 / 导入 / 重置 ===== */
+document.getElementById("btnExport").onclick=function(){
+  ensureCustom();
+  const blob=new Blob([JSON.stringify(custom,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="hzm287-custom.json"; a.click(); URL.revokeObjectURL(a.href);
+  toast("配置已导出");
+};
+document.getElementById("btnImport").onclick=function(){
+  const inp=document.createElement("input"); inp.type="file"; inp.accept=".json,application/json";
+  inp.onchange=function(){
+    const file=inp.files[0]; if(!file) return;
+    const r=new FileReader();
+    r.onload=function(){
+      try{ const data=JSON.parse(r.result);
+        if(!data.streamers || !Array.isArray(data.streamers)){ toast("文件格式不正确","err"); return; }
+        custom=data; saveCustom(); refreshAll(); switchPanel("streamers");
+        toast("配置导入成功");
+      }catch(e){ toast("导入失败："+e.message,"err"); }
+    }; r.readAsText(file);
+  }; inp.click();
+};
+document.getElementById("btnReset").onclick=function(){
+  if(!confirm("恢复默认配置？将清除你在本机的所有自定义（主播、周表、背景）。")) return;
+  custom=null; localStorage.removeItem(LS_KEY); refreshAll(); switchPanel("streamers");
+  toast("已恢复默认配置");
+};
+
+/* ===== 启动 ===== */
+const days=weekDays();
+document.getElementById("btnDay").onclick=()=>setView("day");
+document.getElementById("btnWeek").onclick=()=>setView("week");
 renderDates(days);
 renderLegend();
 renderBoard();
 setView("day");
+applyBg();
 </script>
 </body>
 </html>
