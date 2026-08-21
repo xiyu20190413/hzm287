@@ -191,7 +191,7 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
   <div class="topbar">
     <div>
       <h1>灰泽满＆287 共享周表</h1>
-      <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空</div>
+      <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空 · <span id="updatedAt" style="color:var(--ok)">最后更新 —</span></div>
     </div>
     <div class="top-actions">
       <button class="btn" id="btnOpenAdmin">
@@ -393,7 +393,7 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
 <div id="toasts"></div>
 
 <script>
-const STREAMERS = [{"name":"灰泽满Hazel","color":"#D3D3D3","avatar":"photo/Hazel.jpg","live":"https://b23.tv/0JAnyGj","space":"https://b23.tv/3AHwUJ1","schedule":{"MON":[],"TUE":[["20:00","22:00","游戏"]],"WED":[["20:00","22:00",""]],"THU":[[null,null,"待定"]],"FRI":[["20:00","22:00","联动游戏"]],"SAT":[["20:00","22:00",""]],"SUN":[[null,null,"待定"]]}},{"name":"四时小路Komichi","color":"#FF2231","avatar":"photo/Komichi.jpg","live":"https://b23.tv/xuFCKTc","space":"https://b23.tv/DY8ETAE","schedule":{"MON":[["08:00","10:00","音乐分享电台"]],"TUE":[[null,null,"派发传单中·."]],"WED":[["20:30","22:30","绣湖新作"]],"THU":[[null,null,"派发传单中."]],"FRI":[["20:00","22:00","【联动】致命公司"]],"SAT":[["15:00","17:00","小唱一下+3050追悼会"]],"SUN":[["19:00","21:00","一起看冰火"]]}},{"name":"小松绿Viridis","color":"#8EB056","avatar":"photo/Viridis.jpg","live":"https://b23.tv/aZNKyp3","space":"https://b23.tv/UIq2wIL","schedule":{"MON":[],"TUE":[["19:00","21:00","来唱歌吧"]],"WED":[["19:00","21:00","脑死杂谈"]],"THU":[["19:00","21:00","偶像主题歌回"]],"FRI":[["20:00","22:00","致命公司联动"]],"SAT":[],"SUN":[["19:00","21:00","行道树（2）"]]}},{"name":"枝堇Sumire","color":"#B4A6BF","avatar":"photo/Sumire.jpg","live":"https://b23.tv/QjLdUeT","space":"https://b23.tv/ohyp2dm","schedule":{"MON":[["18:00","20:00","杂谈"]],"TUE":[["09:00","11:00","早台读书"],["22:00","00:00","电台"]],"WED":[["22:00","00:00","晚间歌杂"]],"THU":[["14:00","16:00","午睡回"]],"FRI":[["20:00","22:00","致命公司联动"]],"SAT":[["09:00","11:00","早台读书"]],"SUN":[]}},{"name":"羽啾chu2u","color":"#D4DA7B","avatar":"photo/chu2u.jpg","live":"https://b23.tv/89Hv7Xn","space":"https://b23.tv/EuoNF8j","schedule":{"MON":[["14:00","16:00","外星杂谈"]],"TUE":[["14:00","16:00","外星歌杂"]],"WED":[["22:00","00:00","来一起过七夕"]],"THU":[["14:00","16:00","外星歌杂"],["22:00","00:00","外星杂谈"]],"FRI":[["20:00","22:00","和前辈致命公司"]],"SAT":[["14:00","16:00","宇宙歌杂"],["22:00","00:00","宇宙电台"]],"SUN":[["22:00","00:00","区区恐怖游戏"]]}}];
+const STREAMERS = [{"name": "灰泽满Hazel", "color": "#D3D3D3", "avatar": "photo/Hazel.jpg", "live": "https://b23.tv/0JAnyGj", "space": "https://b23.tv/3AHwUJ1", "schedule": {"MON": [], "TUE": [["20:00", "22:00", "游戏"]], "WED": [["20:00", "22:00", ""]], "THU": [[null, null, "待定"]], "FRI": [["20:00", "22:00", "联动游戏"]], "SAT": [["20:00", "22:00", ""]], "SUN": [[null, null, "待定"]]}}, {"name": "四时小路Komichi", "color": "#FF2231", "avatar": "photo/Komichi.jpg", "live": "https://b23.tv/xuFCKTc", "space": "https://b23.tv/DY8ETAE", "schedule": {"MON": [["08:00", "10:00", "音乐分享电台"]], "TUE": [[null, null, "派发传单中·."]], "WED": [["20:30", "22:30", "锈湖新作"]], "THU": [[null, null, "派发传单中."]], "FRI": [["20:00", "22:00", "【联动】致命公司"]], "SAT": [["15:00", "17:00", "小唱一下+3050追悼会"]], "SUN": [["19:00", "21:00", "一起看冰火"]]}}, {"name": "小松绿Viridis", "color": "#8EB056", "avatar": "photo/Viridis.jpg", "live": "https://b23.tv/aZNKyp3", "space": "https://b23.tv/UIq2wIL", "schedule": {"MON": [], "TUE": [[null, null, "Stream"], [null, null, "wee"]], "WED": [["19:00", "21:00", "下周"], ["19:00", "21:00", ""], [null, null, "来唱歌吧"], [null, null, "脑死杂谈"], [null, null, "暑假"]], "THU": [], "FRI": [], "SAT": [], "SUN": [["19:00", "21:00", ""], ["19:00", "21:00", ""], ["20:00", "22:00", "偶像主题"], [null, null, "行道树"], [null, null, "致命公司"], [null, null, "f (2)"], [null, null, "歌回"], [null, null, "联动"]]}}, {"name": "枝堇Sumire", "color": "#B4A6BF", "avatar": "photo/Sumire.jpg", "live": "https://b23.tv/QjLdUeT", "space": "https://b23.tv/ohyp2dm", "schedule": {"MON": [["18:00", "20:00", "杂谈"]], "TUE": [["09:00", "11:00", "早台读书"], ["22:00", "00:00", "电台"]], "WED": [["22:00", "00:00", "晚间歌杂"]], "THU": [["14:00", "16:00", "午睡回"]], "FRI": [["20:00", "22:00", "致命公司联动"]], "SAT": [["09:00", "11:00", "早台读书"]], "SUN": []}}, {"name": "羽啾chu2u", "color": "#D4DA7B", "avatar": "photo/chu2u.jpg", "live": "https://b23.tv/89Hv7Xn", "space": "https://b23.tv/EuoNF8j", "schedule": {"MON": [["14:00", "16:00", "外星杂谈"], [null, null, "想换洗一下床单！"]], "TUE": [["14:00", "16:00", "外星歌杂"], [null, null, "准备一下七夕的活动"]], "WED": [["22:00", "00:00", "来一起过七夕"], [null, null, "淮备一些小惊喜吧"]], "THU": [["14:00", "16:00", "外星歌杂"], ["22:00", "00:00", "外杂谈"]], "FRI": [["20:00", "22:00", "和前辈致命公司"], [null, null, "休息！睡个大懒觉"]], "SAT": [["14:00", "16:00", "宇宙歌杂"], ["22:00", "00:00", "宇宙电台"], [null, null, "TTTT"]], "SUN": [["22:00", "00:00", "区区恐怖游戏？！"], [null, null, "睡个懒觉吧"]]}}];
 
 const DAY_KEYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 const DAY_LABELS = ["周一","周二","周三","周四","周五","周六","周日"];
@@ -414,7 +414,35 @@ function ensureCustom(){
   saveCustom();
   return custom;
 }
-function activeStreamers(){ return (custom && custom.streamers && custom.streamers.length) ? custom.streamers : STREAMERS; }
+function activeStreamers(){ return (custom && custom.streamers && custom.streamers.length) ? custom.streamers : (remoteStreamers && remoteStreamers.length ? remoteStreamers : STREAMERS); }
+
+/* ===== 实时数据：运行时拉取 streamers.json 并定时轮询 ===== */
+let remoteStreamers = null;
+let remoteUpdatedAt = null;
+function updateUpdatedLabel(){
+  const el = document.getElementById("updatedAt");
+  if(!el) return;
+  if(!remoteUpdatedAt){ el.textContent = "最后更新 —"; return; }
+  try{
+    const d = new Date(remoteUpdatedAt);
+    const p = n => String(n).padStart(2,"0");
+    el.textContent = "最后更新 " + p(d.getMonth()+1) + "/" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }catch(e){ el.textContent = "最后更新 —"; }
+}
+async function loadRemote(){
+  try{
+    const r = await fetch("streamers.json?_=" + Date.now(), {cache:"no-store"});
+    if(!r.ok) return;
+    const d = await r.json();
+    if(d && Array.isArray(d.streamers) && d.streamers.length){
+      remoteStreamers = d.streamers;
+      remoteUpdatedAt = d.updated_at || null;
+      updateUpdatedLabel();
+      renderBoard();
+      if(currentView === "week") renderWeek();
+    }
+  }catch(e){ /* 本地打开/网络异常时静默回退到内置数据 */ }
+}
 
 function avatarUrl(s){
   if(s.avatar && s.avatar.trim()) return s.avatar;
@@ -946,6 +974,10 @@ renderLegend();
 renderBoard();
 setView("day");
 applyBg();
+
+/* 拉取最新周表数据，并每 5 分钟轮询一次（数据一推送，打开的页面最多 5 分钟自更新） */
+loadRemote();
+setInterval(loadRemote, 5 * 60 * 1000);
 </script>
 </body>
 </html>
