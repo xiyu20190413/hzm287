@@ -403,22 +403,64 @@ const AXIS_H = (AXIS_END - AXIS_START) * PX_PER_HOUR;
 const LS_KEY = "hzm287_custom_v1";
 const SCH_PX = 64; /* 周表编辑网格每小时像素（1h=64px，半小时=32px） */
 
-/* ===== 本地状态 ===== */
+/* ===== 本地状态（覆盖层 overlay 模式 v2） =====
+ * custom 只存"与官方默认的差异"，官方最新周表（remoteStreamers）始终为底数据：
+ *   v:2
+ *   deleted:    [主播名]            用户删除 → 渲染剔除，维护更新不会重新加回
+ *   editedMeta: {名:{color,avatar,live,space,name}}  对仍存在主播的非周表字段覆盖（受保护）
+ *   added:      [完整主播对象]       用户新增的主播（官方 base 里没有）
+ *   bg:         {...}               背景（纯用户设置）
+ * 周表 schedule 由维护权威（不进 overlay）；管理台手排仅当前会话有效（sessionSchedules）。
+ */
+let remoteStreamers = null;
+let remoteUpdatedAt = null;
 let custom = loadCustom();
 function loadCustom(){ try{ const r=localStorage.getItem(LS_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
 function saveCustom(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(custom)); }catch(e){} }
+function baseStreamers(){ return (remoteStreamers && remoteStreamers.length) ? remoteStreamers : STREAMERS; }
+function migrateIfNeeded(){
+  // 旧 v1 结构含完整 streamers 数组：迁移为 overlay（周表不迁移，交给维护权威）
+  if(!custom || !custom.streamers || !Array.isArray(custom.streamers)) return;
+  const base = STREAMERS, baseNames = new Set(base.map(s=>s.name));
+  const old = custom.streamers, oldNames = new Set(old.map(s=>s.name));
+  const nv = { v:2, deleted:[], editedMeta:{}, added:[], bg: custom.bg||null };
+  old.forEach(s=>{ if(!baseNames.has(s.name)) nv.added.push(JSON.parse(JSON.stringify(s))); });
+  base.forEach(s=>{ if(!oldNames.has(s.name)) nv.deleted.push(s.name); });
+  old.forEach(s=>{ const b=base.find(x=>x.name===s.name); if(!b) return;
+    const m={}; ["name","color","avatar","live","space"].forEach(f=>{ if(s[f]!=null && s[f]!==b[f]) m[f]=s[f]; });
+    if(Object.keys(m).length) nv.editedMeta[s.name]=m; });
+  custom = nv; saveCustom();
+}
+migrateIfNeeded();
 function ensureCustom(){
   if(!custom) custom={};
-  if(!custom.streamers) custom.streamers = JSON.parse(JSON.stringify(STREAMERS));
-  if(!custom.bg) custom.bg = null;
-  saveCustom();
-  return custom;
+  if(custom.v!==2){ custom={v:2,deleted:[],editedMeta:{},added:[],bg:(custom&&custom.bg)?custom.bg:null}; }
+  if(!custom.deleted) custom.deleted=[];
+  if(!custom.editedMeta) custom.editedMeta={};
+  if(!custom.added) custom.added=[];
+  if(custom.bg===undefined) custom.bg=null;
+  saveCustom(); return custom;
 }
-function activeStreamers(){ return (custom && custom.streamers && custom.streamers.length) ? custom.streamers : (remoteStreamers && remoteStreamers.length ? remoteStreamers : STREAMERS); }
+let sessionSchedules = {};  // 当前会话的周表临时修正（刷新/重开即丢，维护更新始终权威）
+function activeStreamers(){
+  const base = baseStreamers();
+  if(!custom || custom.v!==2){ return JSON.parse(JSON.stringify(base)); }
+  const deleted = new Set(custom.deleted||[]);
+  const edited = custom.editedMeta||{};
+  const out = [];
+  base.forEach(s=>{
+    if(deleted.has(s.name)) return;
+    const s2 = JSON.parse(JSON.stringify(s));
+    const m = edited[s.name];
+    if(m){ ["name","color","avatar","live","space"].forEach(f=>{ if(m[f]!=null) s2[f]=m[f]; }); }
+    if(sessionSchedules[s.name]) s2.schedule = JSON.parse(JSON.stringify(sessionSchedules[s.name]));
+    out.push(s2);
+  });
+  (custom.added||[]).forEach(s=> out.push(JSON.parse(JSON.stringify(s))));
+  return out;
+}
 
-/* ===== 实时数据：运行时拉取 streamers.json 并定时轮询 ===== */
-let remoteStreamers = null;
-let remoteUpdatedAt = null;
+/* ===== 实时数据：拉取 streamers.json 并定时轮询（remoteStreamers/remoteUpdatedAt 已在上方声明） ===== */
 function updateUpdatedLabel(){
   const el = document.getElementById("updatedAt");
   if(!el) return;
@@ -600,15 +642,19 @@ function renderAdmin(){ switchPanel("streamers"); }
 
 /* ===== 模块1：主播管理 ===== */
 function renderStreamers(){
-  const S=ensureCustom().streamers;
+  const S=activeStreamers();
+  const base=baseStreamers();
   const el=document.getElementById("smList");
   if(!S.length){ el.innerHTML='<div class="empty">还没有主播，点右上角「+ 添加主播」开始</div>'; return; }
   el.innerHTML=S.map((s,i)=>{
+    const inBase=base.some(b=>b.name===s.name);
     return '<div class="sm-card">'
       +'<img class="av-img" src="'+avatarUrl(s)+'" alt="">'
       +'<div class="info"><div class="nm">'+esc(s.name)+'</div>'
       +'<div class="color-dot"><i style="background:'+s.color+'"></i>'+esc(s.color)+'</div>'
-      +'<div class="links">'+(s.live?('直播 '+esc(s.live)):"")+(s.space?(' · 空间 '+esc(s.space)):"")+'</div></div>'
+      +'<div class="links">'+(s.live?('直播 '+esc(s.live)):"")+(s.space?(' · 空间 '+esc(s.space)):"")+'</div>'
+      + (inBase?'':'<div class="tag">自定义新增</div>')
+      +'</div>'
       +'<div class="ops"><button class="link-btn" onclick="editStreamer('+i+')">编辑</button><button class="link-btn danger" onclick="delStreamer('+i+')">删除</button></div>'
       +'</div>';
   }).join("");
@@ -623,7 +669,7 @@ function showStreamerForm(index){
     document.getElementById("smColorHex").value="#8EB056"; document.getElementById("smLive").value="";
     document.getElementById("smSpace").value=""; document.getElementById("smAvatar").value="";
   }else{
-    const s=custom.streamers[index];
+    const s=activeStreamers()[index];
     document.getElementById("smName").value=s.name||""; document.getElementById("smColor").value=s.color||"#8EB056";
     document.getElementById("smColorHex").value=s.color||""; document.getElementById("smLive").value=s.live||"";
     document.getElementById("smSpace").value=s.space||""; document.getElementById("smAvatar").value=s.avatar||"";
@@ -632,9 +678,22 @@ function showStreamerForm(index){
 }
 function editStreamer(i){ showStreamerForm(i); }
 function delStreamer(i){
-  const nm=custom.streamers[i].name;
+  const S=activeStreamers();
+  const nm=S[i].name;
   if(!confirm("确定删除主播「"+nm+"」？其周表将一并删除。")) return;
-  custom.streamers.splice(i,1); saveCustom(); renderStreamers(); refreshAll();
+  const base=baseStreamers();
+  ensureCustom();
+  if(base.some(b=>b.name===nm)){
+    // 官方主播 → 标记 deleted（维护更新不会重新加回）
+    if(!custom.deleted.includes(nm)) custom.deleted.push(nm);
+    if(custom.editedMeta) delete custom.editedMeta[nm];
+  }else{
+    // 用户新增的主播 → 直接从 added 移除
+    const ai=custom.added.findIndex(a=>a.name===nm);
+    if(ai>=0) custom.added.splice(ai,1);
+  }
+  delete sessionSchedules[nm];
+  saveCustom(); renderStreamers(); refreshAll();
   toast("已删除主播「"+nm+"」");
 }
 document.getElementById("btnAddStreamer").onclick=()=>showStreamerForm(-1);
@@ -646,22 +705,38 @@ document.getElementById("smSave").onclick=function(){
   if(!name){ toast("请填写主播名","warn"); return; }
   let color=document.getElementById("smColorHex").value.trim();
   if(!/^#[0-9a-fA-F]{6}$/.test(color)) color=document.getElementById("smColor").value;
+  const avatar=document.getElementById("smAvatar").value.trim();
+  const live=document.getElementById("smLive").value.trim();
+  const space=document.getElementById("smSpace").value.trim();
+  ensureCustom();
   const idx=parseInt(document.getElementById("smFormIndex").value,10);
-  const isEdit=idx>=0;
-  const obj={ name, color, avatar:document.getElementById("smAvatar").value.trim(),
-    live:document.getElementById("smLive").value.trim(), space:document.getElementById("smSpace").value.trim(),
-    schedule: isEdit ? custom.streamers[idx].schedule : emptySchedule() };
-  if(!isEdit){ custom.streamers.push(obj); }
-  else{ Object.assign(custom.streamers[idx], obj); }
+  if(idx<0){
+    // 新增主播 → added
+    custom.added.push({ name, color, avatar, live, space, schedule:emptySchedule() });
+    saveCustom(); document.getElementById("smFormCard").style.display="none"; renderStreamers(); refreshAll();
+    toast("主播「"+name+"」已添加");
+    return;
+  }
+  // 编辑现有主播：非周表字段写 overlay（维护更新不会覆盖）
+  const cur=activeStreamers()[idx];
+  const curName=cur.name;
+  const base=baseStreamers();
+  if(base.some(b=>b.name===curName)){
+    custom.editedMeta[curName]={ name, color, avatar, live, space };
+  }else{
+    const ai=custom.added.findIndex(a=>a.name===curName);
+    if(ai>=0) Object.assign(custom.added[ai], { name, color, avatar, live, space });
+  }
   saveCustom(); document.getElementById("smFormCard").style.display="none"; renderStreamers(); refreshAll();
-  toast(isEdit ? "主播信息已修改" : "主播「"+name+"」已添加");
+  toast("主播信息已修改");
 };
 
-/* ===== 模块2：周表编辑（总览网格 + 弹框） ===== */
+/* ===== 模块2：周表编辑（总览网格 + 弹框） =====
+   说明：周表由维护权威，此处手排仅"当前会话有效"（sessionSchedules），刷新/重开恢复官方最新。 */
 function emptySchedule(){ const o={}; DAY_KEYS.forEach(k=>o[k]=[]); return o; }
 let schStreamer=0;
 function renderSchedule(){
-  const S=ensureCustom().streamers;
+  const S=activeStreamers();
   const sel=document.getElementById("schStreamer");
   sel.innerHTML=S.map((s,i)=>'<option value="'+i+'">'+esc(s.name)+'</option>').join("");
   sel.value=String(schStreamer);
@@ -670,7 +745,7 @@ function renderSchedule(){
 document.getElementById("schStreamer").onchange=function(){ schStreamer=parseInt(this.value,10); renderSchGrid(); };
 
 function renderSchGrid(){
-  const S=custom.streamers;
+  const S=activeStreamers();
   if(!S.length){ document.getElementById("schGrid").innerHTML='<div class="empty">请先在「主播管理」添加主播</div>'; return; }
   const s=S[schStreamer];
   if(!s.schedule) s.schedule=emptySchedule();
@@ -715,7 +790,9 @@ function openSlot(day, index){
   document.getElementById("slotIndex").value=String(index);
   document.getElementById("slotDelete").style.display = (index>=0) ? "" : "none";
   document.getElementById("slotModalTitle").textContent = (index>=0) ? "编辑直播" : "添加直播";
-  const dayArr=custom.streamers[schStreamer].schedule[day];
+  const S=activeStreamers();
+  const sName=S[schStreamer].name;
+  const dayArr=(sessionSchedules[sName] ? sessionSchedules[sName][day] : S[schStreamer].schedule[day]) || [];
   const x=(index>=0 && dayArr && dayArr[index]) ? dayArr[index] : null;
   if(x){
     document.getElementById("slotStart").value=x[0]||"";
@@ -743,14 +820,16 @@ document.getElementById("slotStart").addEventListener("change",function(){
 });
 function overlaps(a,b){ return a[0]<b[1] && b[0]<a[1]; }
 document.getElementById("slotSave").onclick=function(){
-  const S=custom.streamers; if(!S.length) return;
+  const S=activeStreamers(); if(!S.length) return;
+  const sName=S[schStreamer].name;
+  if(!sessionSchedules[sName]) sessionSchedules[sName]=JSON.parse(JSON.stringify(S[schStreamer].schedule));
   const day=document.getElementById("slotDaySel").value;
   const start=document.getElementById("slotStart").value.trim();
   const end=document.getElementById("slotEnd").value.trim();
   const topic=document.getElementById("slotTopic").value.trim();
   if(!start && !topic){ toast("请填写时间或主题","warn"); return; }
   const idx=parseInt(document.getElementById("slotIndex").value,10);
-  const arr=S[schStreamer].schedule[day] || (S[schStreamer].schedule[day]=[]);
+  const arr=sessionSchedules[sName][day] || (sessionSchedules[sName][day]=[]);
   // 冲突检测（仅当有起止时间）
   if(start && end && /^\d{1,2}:\d{2}$/.test(start) && /^\d{1,2}:\d{2}$/.test(end)){
     const sh=toHours(start), eh=toHours(end);
@@ -764,21 +843,24 @@ document.getElementById("slotSave").onclick=function(){
   }
   const newSlot=[start||null, end||null, topic];
   if(idx>=0 && idx<arr.length) arr[idx]=newSlot; else arr.push(newSlot);
-  saveCustom(); refreshAll(); renderSchGrid(); closeSlotModal();
-  toast("直播安排已保存");
+  refreshAll(); renderSchGrid(); closeSlotModal();
+  toast("直播安排已保存（仅本次会话，刷新后恢复官方最新）");
 };
 document.getElementById("slotDelete").onclick=function(){
+  const S=activeStreamers(); if(!S.length) return;
+  const sName=S[schStreamer].name;
   const day=document.getElementById("slotDaySel").value;
   const idx=parseInt(document.getElementById("slotIndex").value,10);
   if(idx<0) return;
-  custom.streamers[schStreamer].schedule[day].splice(idx,1);
-  saveCustom(); refreshAll(); renderSchGrid(); closeSlotModal();
-  toast("已删除该场直播");
+  if(!sessionSchedules[sName]) sessionSchedules[sName]=JSON.parse(JSON.stringify(S[schStreamer].schedule));
+  sessionSchedules[sName][day].splice(idx,1);
+  refreshAll(); renderSchGrid(); closeSlotModal();
+  toast("已删除该场直播（仅本次会话）");
 };
 
 /* ===== 模块3：周表导入 ===== */
 function renderOcrTargets(){
-  const S=ensureCustom().streamers;
+  const S=activeStreamers();
   document.getElementById("ocrTarget").innerHTML=S.map((s,i)=>'<option value="'+i+'">'+esc(s.name)+'</option>').join("");
   const dsel=document.getElementById("ocrDay");
   if(!dsel.options.length){ dsel.innerHTML=DAY_KEYS.map((k,i)=>'<option value="'+k+'">'+DAY_LABELS[i]+'</option>').join(""); }
@@ -793,23 +875,25 @@ document.getElementById("btnImportText").onclick=function(){
   try{ data=JSON.parse(raw); }catch(e){ msg.textContent="JSON 解析失败："+e.message; msg.style.color="#c94f4f"; return; }
   ensureCustom();
   let arr = Array.isArray(data) ? data : (data.streamers ? data.streamers : [data]);
-  let added=0, merged=0;
+  const base=baseStreamers();
+  let added=0, merged=0, schImp=0;
   arr.forEach(item=>{
     if(!item || typeof item!=="object" || !item.name){ return; }
-    const exist=custom.streamers.find(s=>s.name===item.name);
-    if(exist){
-      if(item.schedule){ exist.schedule=item.schedule; merged++; }
-      if(item.color) exist.color=item.color;
-      if(item.live) exist.live=item.live; if(item.space) exist.space=item.space;
+    const inBase=base.some(b=>b.name===item.name);
+    if(inBase){
+      const m={};
+      ["name","color","avatar","live","space"].forEach(f=>{ if(item[f]) m[f]=item[f]; });
+      if(Object.keys(m).length){ custom.editedMeta[item.name]=m; merged++; }
+      if(item.schedule){ sessionSchedules[item.name]=JSON.parse(JSON.stringify(item.schedule)); schImp++; }
     }else{
-      custom.streamers.push({ name:item.name, color:item.color||"#8EB056", avatar:item.avatar||"",
+      custom.added.push({ name:item.name, color:item.color||"#8EB056", avatar:item.avatar||"",
         live:item.live||"", space:item.space||"", schedule:item.schedule||emptySchedule() });
       added++;
     }
   });
   if(data.bg){ custom.bg=data.bg; }
   saveCustom(); refreshAll();
-  msg.textContent="导入完成：新增 "+added+" 位主播，合并 "+merged+" 位周表"+(data.bg?"，已更新背景":"");
+  msg.textContent="导入完成：新增 "+added+" 位主播，合并 "+merged+" 位设置"+(schImp?"，周表已套用（当前会话）":"");
   msg.style.color="#5f8f3f"; document.getElementById("importText").value="";
   toast("导入完成：新增 "+added+"、合并 "+merged);
 };
@@ -875,11 +959,12 @@ function fmt(t){ return String(t.h).padStart(2,"0")+":"+String(t.m).padStart(2,"
 
 document.getElementById("btnOcrParse").onclick=parseOcr;
 document.getElementById("btnOcrImport").onclick=function(){
-  const S=custom.streamers; if(!S.length){ toast("请先添加主播","warn"); return; }
+  const S=activeStreamers(); if(!S.length){ toast("请先添加主播","warn"); return; }
   const ti=parseInt(document.getElementById("ocrTarget").value,10);
   const day=document.getElementById("ocrDay").value;
-  const target=S[ti]; if(!target.schedule) target.schedule=emptySchedule();
-  const arr=target.schedule[day];
+  const sName=S[ti].name;
+  const targetSched=sessionSchedules[sName] || (sessionSchedules[sName]=JSON.parse(JSON.stringify(S[ti].schedule)));
+  const arr=targetSched[day] || (targetSched[day]=[]);
   const cands=document.querySelectorAll(".ocr-cand");
   let n=0, conflict=0;
   cands.forEach(row=>{
@@ -898,8 +983,8 @@ document.getElementById("btnOcrImport").onclick=function(){
     }
     arr.push([start||null,end||null,topic]); n++;
   });
-  saveCustom(); refreshAll();
-  toast("已导入 "+n+" 场直播"+(conflict?"，跳过 "+conflict+" 场冲突":""));
+  refreshAll();
+  toast("已导入 "+n+" 场直播（当前会话）"+(conflict?"，跳过 "+conflict+" 场冲突":""));
   renderOcrTargets();
 };
 
@@ -943,7 +1028,7 @@ document.getElementById("btnExport").onclick=function(){
   const blob=new Blob([JSON.stringify(custom,null,2)],{type:"application/json"});
   const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
   a.download="hzm287-custom.json"; a.click(); URL.revokeObjectURL(a.href);
-  toast("配置已导出");
+  toast("配置已导出（覆盖层格式）");
 };
 document.getElementById("btnImport").onclick=function(){
   const inp=document.createElement("input"); inp.type="file"; inp.accept=".json,application/json";
@@ -952,16 +1037,22 @@ document.getElementById("btnImport").onclick=function(){
     const r=new FileReader();
     r.onload=function(){
       try{ const data=JSON.parse(r.result);
-        if(!data.streamers || !Array.isArray(data.streamers)){ toast("文件格式不正确","err"); return; }
-        custom=data; saveCustom(); refreshAll(); switchPanel("streamers");
+        if(data && data.v===2 && Array.isArray(data.deleted)){
+          // overlay v2 备份直接还原
+          custom=data; saveCustom();
+        }else if(data && Array.isArray(data.streamers)){
+          // 旧完整 streamers 备份 → 走迁移
+          custom=data; migrateIfNeeded();
+        }else{ toast("文件格式不正确","err"); return; }
+        sessionSchedules={}; refreshAll(); switchPanel("streamers");
         toast("配置导入成功");
       }catch(e){ toast("导入失败："+e.message,"err"); }
     }; r.readAsText(file);
   }; inp.click();
 };
 document.getElementById("btnReset").onclick=function(){
-  if(!confirm("恢复默认配置？将清除你在本机的所有自定义（主播、周表、背景）。")) return;
-  custom=null; localStorage.removeItem(LS_KEY); refreshAll(); switchPanel("streamers");
+  if(!confirm("恢复默认配置？将清除你在本机的所有自定义（主播、周表、背景），并恢复官方最新周表。")) return;
+  custom=null; localStorage.removeItem(LS_KEY); sessionSchedules={}; refreshAll(); switchPanel("streamers");
   toast("已恢复默认配置");
 };
 
