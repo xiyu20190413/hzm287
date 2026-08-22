@@ -728,7 +728,7 @@ document.getElementById("btnPickAvatar").onclick=function(){ document.getElement
 document.getElementById("smAvatarFile").onchange=function(){
   const file=this.files[0]; if(!file) return;
   const r=new FileReader();
-  r.onload=function(){ smAvatarLocal=r.result; updateSmAvatarHint(); };
+  r.onload=function(){ smAvatarLocal=r.result; updateSmAvatarHint(); toast("头像上传成功，保存后生效"); };
   r.readAsDataURL(file);
 };
 document.getElementById("btnClearAvatar").onclick=function(){
