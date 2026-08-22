@@ -272,7 +272,15 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
             </div>
             <div class="field"><label>直播间链接（可选）</label><input class="inp" id="smLive" placeholder="https://..."></div>
             <div class="field"><label>个人空间链接（可选）</label><input class="inp" id="smSpace" placeholder="https://..."></div>
-            <div class="field full"><label>头像图片地址（可选）</label><input class="inp" id="smAvatar" placeholder="留空则用应援色圆块代替"></div>
+            <div class="field full"><label>头像图片地址（可选，支持线上链接或本地图片）</label>
+              <div class="inp-row">
+                <input class="inp" id="smAvatar" placeholder="https://... 线上图片地址">
+                <input type="file" id="smAvatarFile" accept="image/*" style="display:none">
+                <button class="btn" id="btnPickAvatar">上传本地</button>
+                <button class="btn danger" id="btnClearAvatar">清除</button>
+              </div>
+              <div class="hint" id="smAvatarHint">支持线上 URL 或上传本地图片；上传本地图片后将以本地图片为准。留空则用应援色圆块代替。</div>
+            </div>
           </div>
           <div class="btn-row">
             <button class="btn primary" id="smSave">保存</button>
@@ -669,16 +677,22 @@ function showStreamerForm(index){
   const f=document.getElementById("smFormCard"); f.style.display="block";
   document.getElementById("smFormTitle").textContent = index<0 ? "添加主播" : "编辑主播";
   document.getElementById("smFormIndex").value=index;
+  document.getElementById("smAvatarFile").value="";
   if(index<0){
     document.getElementById("smName").value=""; document.getElementById("smColor").value="#8EB056";
     document.getElementById("smColorHex").value="#8EB056"; document.getElementById("smLive").value="";
     document.getElementById("smSpace").value=""; document.getElementById("smAvatar").value="";
+    smAvatarLocal="";
   }else{
     const s=activeStreamers()[index];
     document.getElementById("smName").value=s.name||""; document.getElementById("smColor").value=s.color||"#8EB056";
     document.getElementById("smColorHex").value=s.color||""; document.getElementById("smLive").value=s.live||"";
-    document.getElementById("smSpace").value=s.space||""; document.getElementById("smAvatar").value=s.avatar||"";
+    document.getElementById("smSpace").value=s.space||"";
+    const av=s.avatar||"";
+    if(av.startsWith("data:")){ smAvatarLocal=av; document.getElementById("smAvatar").value=""; }
+    else{ smAvatarLocal=""; document.getElementById("smAvatar").value=av; }
   }
+  updateSmAvatarHint();
   f.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function editStreamer(i){ showStreamerForm(i); }
@@ -701,6 +715,26 @@ function delStreamer(i){
   saveCustom(); renderStreamers(); refreshAll();
   toast("已删除主播「"+nm+"」");
 }
+let smAvatarLocal="";
+function updateSmAvatarHint(){
+  const h=document.getElementById("smAvatarHint");
+  const u=document.getElementById("smAvatar").value.trim();
+  if(smAvatarLocal) h.textContent="已选择本地图片，保存后将以本地图片为准；可同时在输入框填写线上 URL 作为备用。";
+  else if(u) h.textContent="当前将使用线上地址："+u+"；也可点「上传本地」改用本地图片。";
+  else h.textContent="支持线上 URL 或上传本地图片；上传本地图片后将以本地图片为准。留空则用应援色圆块代替。";
+}
+document.getElementById("smAvatar").oninput=updateSmAvatarHint;
+document.getElementById("btnPickAvatar").onclick=function(){ document.getElementById("smAvatarFile").click(); };
+document.getElementById("smAvatarFile").onchange=function(){
+  const file=this.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=function(){ smAvatarLocal=r.result; updateSmAvatarHint(); };
+  r.readAsDataURL(file);
+};
+document.getElementById("btnClearAvatar").onclick=function(){
+  document.getElementById("smAvatar").value=""; document.getElementById("smAvatarFile").value="";
+  smAvatarLocal=""; updateSmAvatarHint();
+};
 document.getElementById("btnAddStreamer").onclick=()=>showStreamerForm(-1);
 document.getElementById("smCancel").onclick=()=>{ document.getElementById("smFormCard").style.display="none"; };
 document.getElementById("smColor").oninput=function(){ document.getElementById("smColorHex").value=this.value; };
@@ -710,7 +744,7 @@ document.getElementById("smSave").onclick=function(){
   if(!name){ toast("请填写主播名","warn"); return; }
   let color=document.getElementById("smColorHex").value.trim();
   if(!/^#[0-9a-fA-F]{6}$/.test(color)) color=document.getElementById("smColor").value;
-  const avatar=document.getElementById("smAvatar").value.trim();
+  const avatar=(smAvatarLocal||document.getElementById("smAvatar").value.trim());
   const live=document.getElementById("smLive").value.trim();
   const space=document.getElementById("smSpace").value.trim();
   ensureCustom();
