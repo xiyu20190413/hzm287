@@ -656,17 +656,14 @@ function renderAdmin(){ switchPanel("streamers"); }
 /* ===== 模块1：主播管理 ===== */
 function renderStreamers(){
   const S=activeStreamers();
-  const base=baseStreamers();
   const el=document.getElementById("smList");
   if(!S.length){ el.innerHTML='<div class="empty">还没有主播，点右上角「+ 添加主播」开始</div>'; return; }
   el.innerHTML=S.map((s,i)=>{
-    const inBase=base.some(b=>b.name===s.name);
     return '<div class="sm-card">'
       +'<img class="av-img" src="'+avatarUrl(s)+'" alt="">'
       +'<div class="info"><div class="nm">'+esc(s.name)+'</div>'
       +'<div class="color-dot"><i style="background:'+s.color+'"></i>'+esc(s.color)+'</div>'
       +'<div class="links">'+(s.live?('直播 '+esc(s.live)):"")+(s.space?(' · 空间 '+esc(s.space)):"")+'</div>'
-      + (inBase?'':'<div class="tag">自定义新增</div>')
       +'</div>'
       +'<div class="ops"><button class="link-btn" onclick="editStreamer('+i+')">编辑</button><button class="link-btn danger" onclick="delStreamer('+i+')">删除</button></div>'
       +'</div>';
