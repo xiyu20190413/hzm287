@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GRC定制厕纸</title>
+<title>灰泽满＆287 共享周表</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -99,7 +99,7 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 .admin-data button:hover{border-color:var(--ink2)}
 
 .admin-main{flex:1;overflow-y:auto;padding:32px 36px}
-.admin-panel{max-width:1280px;margin:0 auto}
+.admin-panel{max-width:960px}
 .admin-panel h2{font-size:22px;font-weight:700}
 .admin-panel .desc{font-size:13px;color:var(--ink2);margin-top:4px;margin-bottom:20px}
 .panel-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
@@ -114,8 +114,6 @@ h1{font-size:20px;font-weight:600;letter-spacing:.5px}
 select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5l3-3' stroke='%23888780' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
 .color-inp{width:42px;height:34px;border:1px solid var(--btn);border-radius:8px;padding:2px;background:var(--card);cursor:pointer}
 .btn-row{display:flex;gap:8px;align-items:center;margin-top:4px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
-.form-grid .full{grid-column:1 / -1}
 
 /* 主播卡片（管理） */
 .sm-list{display:flex;flex-direction:column;gap:12px}
@@ -185,7 +183,6 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
   .admin-brand,.admin-nav button span,.admin-data button span{display:none}
   .admin-nav button{justify-content:center;padding:11px}
   .admin-main{padding:20px 14px}
-  .form-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -193,7 +190,7 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
 <div class="wrap" id="view">
   <div class="topbar">
     <div>
-      <h1>GRC定制厕纸</h1>
+      <h1>灰泽满＆287 共享周表</h1>
       <div class="sub" id="sub">横轴主播 · 纵轴连续时间轴（06:00 起）· 空 = 休息留空 · <span id="updatedAt" style="color:var(--ok)">最后更新 —</span></div>
     </div>
     <div class="top-actions">
@@ -220,8 +217,8 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
   <div class="admin-inner">
     <aside class="admin-side">
       <div class="admin-brand">
-        <div class="t">GRC定制厕纸</div>
-        <div class="s">定制厕纸 · 自定义</div>
+        <div class="t">灰泽满＆287</div>
+        <div class="s">共享周表 · 自定义</div>
       </div>
       <nav class="admin-nav" id="adminNav">
         <button data-p="streamers" class="active">
@@ -264,24 +261,14 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
         <div class="panel-card" id="smFormCard" style="display:none">
           <div class="card-title" id="smFormTitle">添加主播</div>
           <input type="hidden" id="smFormIndex" value="-1">
-          <div class="form-grid">
-            <div class="field"><label>主播名</label><input class="inp" id="smName" placeholder="例：灰泽满Hazel"></div>
-            <div class="field"><label>应援色</label>
-              <div class="inp-row"><input type="color" class="color-inp" id="smColor" value="#8EB056"><input class="inp" id="smColorHex" placeholder="#8EB056" maxlength="7"></div>
-              <div class="hint">点击左侧色块选色，或直接输入十六进制色值</div>
-            </div>
-            <div class="field"><label>直播间链接（可选）</label><input class="inp" id="smLive" placeholder="https://..."></div>
-            <div class="field"><label>个人空间链接（可选）</label><input class="inp" id="smSpace" placeholder="https://..."></div>
-            <div class="field full"><label>头像图片地址（可选，支持线上链接或本地图片）</label>
-              <div class="inp-row">
-                <input class="inp" id="smAvatar" placeholder="https://... 线上图片地址">
-                <input type="file" id="smAvatarFile" accept="image/*" style="display:none">
-                <button class="btn" id="btnPickAvatar">上传本地</button>
-                <button class="btn danger" id="btnClearAvatar">清除</button>
-              </div>
-              <div class="hint" id="smAvatarHint">支持线上 URL 或上传本地图片；上传本地图片后将以本地图片为准。留空则用应援色圆块代替。</div>
-            </div>
+          <div class="field"><label>主播名</label><input class="inp" id="smName" placeholder="例：灰泽满Hazel"></div>
+          <div class="field"><label>应援色</label>
+            <div class="inp-row"><input type="color" class="color-inp" id="smColor" value="#8EB056"><input class="inp" id="smColorHex" placeholder="#8EB056" maxlength="7"></div>
+            <div class="hint">点击左侧色块选色，或直接输入十六进制色值</div>
           </div>
+          <div class="field"><label>直播间链接（可选）</label><input class="inp" id="smLive" placeholder="https://..."></div>
+          <div class="field"><label>个人空间链接（可选）</label><input class="inp" id="smSpace" placeholder="https://..."></div>
+          <div class="field"><label>头像图片地址（可选）</label><input class="inp" id="smAvatar" placeholder="留空则用应援色圆块代替"></div>
           <div class="btn-row">
             <button class="btn primary" id="smSave">保存</button>
             <button class="btn" id="smCancel">取消</button>
@@ -297,7 +284,7 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
           <div class="btn-row" style="justify-content:space-between;margin-bottom:14px">
             <div class="inp-row">
               <label style="font-size:13px">主播</label>
-              <select class="inp" id="schStreamer" style="max-width:300px"></select>
+              <select class="inp" id="schStreamer" style="max-width:200px"></select>
             </div>
             <button class="btn primary" id="btnAddSlot">+ 增加</button>
           </div>
@@ -326,9 +313,9 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
             <div id="ocrCandidates" style="margin-top:12px"></div>
             <div class="inp-row" style="margin-top:12px">
               <label style="font-size:13px">统一星期</label>
-              <select class="inp" id="ocrDay" style="min-width:110px;max-width:160px"></select>
+              <select class="inp" id="ocrDay" style="max-width:120px"></select>
               <label style="font-size:13px">导入到主播</label>
-              <select class="inp" id="ocrTarget" style="max-width:300px"></select>
+              <select class="inp" id="ocrTarget" style="max-width:200px"></select>
               <button class="btn primary" id="btnOcrImport">导入选中</button>
             </div>
           </div>
@@ -406,7 +393,7 @@ select.inp{appearance:none;-webkit-appearance:none;background-image:url("data:im
 <div id="toasts"></div>
 
 <script>
-const STREAMERS = [{"name": "灰泽满Hazel", "color": "#D3D3D3", "avatar": "photo/Hazel.jpg", "live": "https://b23.tv/0JAnyGj", "space": "https://b23.tv/3AHwUJ1", "schedule": {"MON": [], "TUE": [["20:00", "22:00", "游戏"]], "WED": [["20:00", "22:00", ""]], "THU": [[null, null, "待定"]], "FRI": [["20:00", "22:00", "联动游戏"]], "SAT": [["20:00", "22:00", ""]], "SUN": [[null, null, "待定"]]}}, {"name": "四时小路Komichi", "color": "#FF2231", "avatar": "photo/Komichi.jpg", "live": "https://b23.tv/xuFCKTc", "space": "https://b23.tv/DY8ETAE", "schedule": {"MON": [["08:00", "10:00", "音乐分享电台"]], "TUE": [[null, null, "派发传单中·."]], "WED": [["20:30", "22:30", "锈湖新作"]], "THU": [[null, null, "派发传单中."]], "FRI": [["20:00", "22:00", "【联动】致命公司"]], "SAT": [["15:00", "17:00", "小唱一下+3050追悼会"]], "SUN": [["19:00", "21:00", "一起看冰火"]]}}, {"name": "小松绿Viridis", "color": "#8EB056", "avatar": "photo/Viridis.jpg", "live": "https://b23.tv/aZNKyp3", "space": "https://b23.tv/UIq2wIL", "schedule": {"MON": [], "TUE": [[null, null, "Stream"], [null, null, "wee"]], "WED": [["19:00", "21:00", "下周"], ["19:00", "21:00", ""], [null, null, "来唱歌吧"], [null, null, "脑死杂谈"], [null, null, "暑假"]], "THU": [], "FRI": [], "SAT": [], "SUN": [["19:00", "21:00", ""], ["19:00", "21:00", ""], ["20:00", "22:00", "偶像主题"], [null, null, "行道树"], [null, null, "致命公司"], [null, null, "f (2)"], [null, null, "歌回"], [null, null, "联动"]]}}, {"name": "枝堇Sumire", "color": "#B4A6BF", "avatar": "photo/Sumire.jpg", "live": "https://b23.tv/QjLdUeT", "space": "https://b23.tv/ohyp2dm", "schedule": {"MON": [["18:00", "20:00", "杂谈"]], "TUE": [["09:00", "11:00", "早台读书"], ["22:00", "00:00", "电台"]], "WED": [["22:00", "00:00", "晚间歌杂"]], "THU": [["14:00", "16:00", "午睡回"]], "FRI": [["20:00", "22:00", "致命公司联动"]], "SAT": [["09:00", "11:00", "早台读书"]], "SUN": []}}, {"name": "羽啾chu2u", "color": "#D4DA7B", "avatar": "photo/chu2u.jpg", "live": "https://b23.tv/89Hv7Xn", "space": "https://b23.tv/EuoNF8j", "schedule": {"MON": [["14:00", "16:00", "外星杂谈"], [null, null, "想换洗一下床单！"]], "TUE": [["14:00", "16:00", "外星歌杂"], [null, null, "准备一下七夕的活动"]], "WED": [["22:00", "00:00", "来一起过七夕"], [null, null, "淮备一些小惊喜吧"]], "THU": [["14:00", "16:00", "外星歌杂"], ["22:00", "00:00", "外杂谈"]], "FRI": [["20:00", "22:00", "和前辈致命公司"], [null, null, "休息！睡个大懒觉"]], "SAT": [["14:00", "16:00", "宇宙歌杂"], ["22:00", "00:00", "宇宙电台"], [null, null, "TTTT"]], "SUN": [["22:00", "00:00", "区区恐怖游戏？！"], [null, null, "睡个懒觉吧"]]}}];
+const STREAMERS = [{"name": "灰泽满Hazel", "color": "#D3D3D3", "avatar": "photo/Hazel.jpg", "live": "https://b23.tv/0JAnyGj", "space": "https://b23.tv/3AHwUJ1", "schedule": {"MON": [], "TUE": [["20:00", "22:00", "游戏"]], "WED": [["20:00", "22:00", ""]], "THU": [[null, null, "待定"]], "FRI": [["20:00", "22:00", "联动游戏"]], "SAT": [["20:00", "22:00", ""]], "SUN": [[null, null, "待定"]]}}, {"name": "四时小路Komichi", "color": "#FF2231", "avatar": "photo/Komichi.jpg", "live": "https://b23.tv/xuFCKTc", "space": "https://b23.tv/DY8ETAE", "schedule": {"MON": [["08:00", "10:00", "音乐分享电台"]], "TUE": [[null, null, "派发传单中."]], "WED": [[null, null, "派发传单中"]], "THU": [["20:30", "22:30", "港诡实录"]], "FRI": [[null, null, "派发传单中"]], "SAT": [["20:00", "22:00", "【派对】主题歌回"]], "SUN": [["21:00", "23:00", "联动"]]}}, {"name": "小松绿Viridis", "color": "#8EB056", "avatar": "photo/Viridis.jpg", "live": "https://b23.tv/aZNKyp3", "space": "https://b23.tv/UIq2wIL", "schedule": {"MON": [], "TUE": [[null, null, "Stream"], [null, null, "wee"]], "WED": [["19:00", "21:00", "下周"], ["19:00", "21:00", ""], [null, null, "来唱歌吧"], [null, null, "脑死杂谈"], [null, null, "暑假"]], "THU": [], "FRI": [], "SAT": [], "SUN": [["19:00", "21:00", ""], ["19:00", "21:00", ""], ["20:00", "22:00", "偶像主题"], [null, null, "行道树"], [null, null, "致命公司"], [null, null, "f (2)"], [null, null, "歌回"], [null, null, "联动"]]}}, {"name": "枝堇Sumire", "color": "#B4A6BF", "avatar": "photo/Sumire.jpg", "live": "https://b23.tv/QjLdUeT", "space": "https://b23.tv/ohyp2dm", "schedule": {"MON": [["18:00", "20:00", "杂谈"]], "TUE": [["09:00", "11:00", "． 早台读书／ 电台"], ["22:00", "00:00", "． 早台读书／ 电台"]], "WED": [["22:00", "00:00", "晚间歌杂"]], "THU": [["14:00", "16:00", "午睡回"]], "FRI": [["20:00", "22:00", "致命公司联动"]], "SAT": [["09:00", "11:00", "早台读书"]], "SUN": []}}, {"name": "羽啾chu2u", "color": "#D4DA7B", "avatar": "photo/chu2u.jpg", "live": "https://b23.tv/89Hv7Xn", "space": "https://b23.tv/EuoNF8j", "schedule": {"MON": [["14:00", "16:00", "外星杂谈"], [null, null, "想换洗一下床单！"]], "TUE": [["14:00", "16:00", "外星歌杂"], [null, null, "准备一下七夕的活动"]], "WED": [["22:00", "00:00", "来一起过七夕"], [null, null, "淮备一些小惊喜吧"]], "THU": [["14:00", "16:00", "外星歌杂"], ["22:00", "00:00", "外杂谈"]], "FRI": [["20:00", "22:00", "和前辈致命公司"], [null, null, "休息！睡个大懒觉"]], "SAT": [["14:00", "16:00", "宇宙歌杂"], ["22:00", "00:00", "宇宙电台"], [null, null, "TTTT"]], "SUN": [["22:00", "00:00", "区区恐怖游戏？！"], [null, null, "睡个懒觉吧"]]}}];
 
 const DAY_KEYS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
 const DAY_LABELS = ["周一","周二","周三","周四","周五","周六","周日"];
@@ -656,14 +643,17 @@ function renderAdmin(){ switchPanel("streamers"); }
 /* ===== 模块1：主播管理 ===== */
 function renderStreamers(){
   const S=activeStreamers();
+  const base=baseStreamers();
   const el=document.getElementById("smList");
   if(!S.length){ el.innerHTML='<div class="empty">还没有主播，点右上角「+ 添加主播」开始</div>'; return; }
   el.innerHTML=S.map((s,i)=>{
+    const inBase=base.some(b=>b.name===s.name);
     return '<div class="sm-card">'
       +'<img class="av-img" src="'+avatarUrl(s)+'" alt="">'
       +'<div class="info"><div class="nm">'+esc(s.name)+'</div>'
       +'<div class="color-dot"><i style="background:'+s.color+'"></i>'+esc(s.color)+'</div>'
       +'<div class="links">'+(s.live?('直播 '+esc(s.live)):"")+(s.space?(' · 空间 '+esc(s.space)):"")+'</div>'
+      + (inBase?'':'<div class="tag">自定义新增</div>')
       +'</div>'
       +'<div class="ops"><button class="link-btn" onclick="editStreamer('+i+')">编辑</button><button class="link-btn danger" onclick="delStreamer('+i+')">删除</button></div>'
       +'</div>';
@@ -674,22 +664,16 @@ function showStreamerForm(index){
   const f=document.getElementById("smFormCard"); f.style.display="block";
   document.getElementById("smFormTitle").textContent = index<0 ? "添加主播" : "编辑主播";
   document.getElementById("smFormIndex").value=index;
-  document.getElementById("smAvatarFile").value="";
   if(index<0){
     document.getElementById("smName").value=""; document.getElementById("smColor").value="#8EB056";
     document.getElementById("smColorHex").value="#8EB056"; document.getElementById("smLive").value="";
     document.getElementById("smSpace").value=""; document.getElementById("smAvatar").value="";
-    smAvatarLocal="";
   }else{
     const s=activeStreamers()[index];
     document.getElementById("smName").value=s.name||""; document.getElementById("smColor").value=s.color||"#8EB056";
     document.getElementById("smColorHex").value=s.color||""; document.getElementById("smLive").value=s.live||"";
-    document.getElementById("smSpace").value=s.space||"";
-    const av=s.avatar||"";
-    if(av.startsWith("data:")){ smAvatarLocal=av; document.getElementById("smAvatar").value=""; }
-    else{ smAvatarLocal=""; document.getElementById("smAvatar").value=av; }
+    document.getElementById("smSpace").value=s.space||""; document.getElementById("smAvatar").value=s.avatar||"";
   }
-  updateSmAvatarHint();
   f.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function editStreamer(i){ showStreamerForm(i); }
@@ -712,26 +696,6 @@ function delStreamer(i){
   saveCustom(); renderStreamers(); refreshAll();
   toast("已删除主播「"+nm+"」");
 }
-let smAvatarLocal="";
-function updateSmAvatarHint(){
-  const h=document.getElementById("smAvatarHint");
-  const u=document.getElementById("smAvatar").value.trim();
-  if(smAvatarLocal) h.textContent="已选择本地图片，保存后将以本地图片为准；可同时在输入框填写线上 URL 作为备用。";
-  else if(u) h.textContent="当前将使用线上地址："+u+"；也可点「上传本地」改用本地图片。";
-  else h.textContent="支持线上 URL 或上传本地图片；上传本地图片后将以本地图片为准。留空则用应援色圆块代替。";
-}
-document.getElementById("smAvatar").oninput=updateSmAvatarHint;
-document.getElementById("btnPickAvatar").onclick=function(){ document.getElementById("smAvatarFile").click(); };
-document.getElementById("smAvatarFile").onchange=function(){
-  const file=this.files[0]; if(!file) return;
-  const r=new FileReader();
-  r.onload=function(){ smAvatarLocal=r.result; updateSmAvatarHint(); toast("头像上传成功，保存后生效"); };
-  r.readAsDataURL(file);
-};
-document.getElementById("btnClearAvatar").onclick=function(){
-  document.getElementById("smAvatar").value=""; document.getElementById("smAvatarFile").value="";
-  smAvatarLocal=""; updateSmAvatarHint();
-};
 document.getElementById("btnAddStreamer").onclick=()=>showStreamerForm(-1);
 document.getElementById("smCancel").onclick=()=>{ document.getElementById("smFormCard").style.display="none"; };
 document.getElementById("smColor").oninput=function(){ document.getElementById("smColorHex").value=this.value; };
@@ -741,7 +705,7 @@ document.getElementById("smSave").onclick=function(){
   if(!name){ toast("请填写主播名","warn"); return; }
   let color=document.getElementById("smColorHex").value.trim();
   if(!/^#[0-9a-fA-F]{6}$/.test(color)) color=document.getElementById("smColor").value;
-  const avatar=(smAvatarLocal||document.getElementById("smAvatar").value.trim());
+  const avatar=document.getElementById("smAvatar").value.trim();
   const live=document.getElementById("smLive").value.trim();
   const space=document.getElementById("smSpace").value.trim();
   ensureCustom();
