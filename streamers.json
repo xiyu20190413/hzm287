@@ -1,6 +1,6 @@
 {
   "site_name": "灰泽满＆287共享周表",
-  "updated_at": "2026-08-24T19:34:30.109032",
+  "updated_at": "2026-08-24T19:41:58.346272",
   "streamers": [
     {
       "name": "灰泽满Hazel",
@@ -84,12 +84,85 @@
       "space": "https://b23.tv/UIq2wIL",
       "schedule": {
         "MON": [],
-        "TUE": [],
-        "WED": [],
+        "TUE": [
+          [
+            null,
+            null,
+            "30"
+          ],
+          [
+            null,
+            null,
+            "wee"
+          ]
+        ],
+        "WED": [
+          [
+            null,
+            null,
+            "14时"
+          ],
+          [
+            null,
+            null,
+            "14时"
+          ],
+          [
+            null,
+            null,
+            "中V歌"
+          ],
+          [
+            null,
+            null,
+            "真的杂谈"
+          ],
+          [
+            null,
+            null,
+            "电台来袭"
+          ],
+          [
+            null,
+            null,
+            "Diridis"
+          ],
+          [
+            null,
+            null,
+            "不上学好爽"
+          ]
+        ],
         "THU": [],
         "FRI": [],
         "SAT": [],
-        "SUN": []
+        "SUN": [
+          [
+            null,
+            null,
+            "10时"
+          ],
+          [
+            null,
+            null,
+            "2时"
+          ],
+          [
+            null,
+            null,
+            "待定"
+          ],
+          [
+            null,
+            null,
+            "行道树"
+          ],
+          [
+            null,
+            null,
+            "纪录片"
+          ]
+        ]
       }
     },
     {
