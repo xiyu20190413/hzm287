@@ -1,6 +1,6 @@
 {
   "site_name": "灰泽满＆287共享周表",
-  "updated_at": "2026-08-24T19:41:58.346272",
+  "updated_at": "2026-08-24T19:46:16.587058",
   "streamers": [
     {
       "name": "灰泽满Hazel",
@@ -83,86 +83,49 @@
       "live": "https://b23.tv/aZNKyp3",
       "space": "https://b23.tv/UIq2wIL",
       "schedule": {
-        "MON": [],
+        "MON": [
+          [
+            "21:00",
+            "23:00",
+            "电台来袭"
+          ]
+        ],
         "TUE": [
           [
-            null,
-            null,
-            "30"
-          ],
-          [
-            null,
-            null,
-            "wee"
+            "14:00",
+            "16:00",
+            "中V歌"
           ]
         ],
         "WED": [
           [
-            null,
-            null,
-            "14时"
-          ],
-          [
-            null,
-            null,
-            "14时"
-          ],
-          [
-            null,
-            null,
-            "中V歌"
-          ],
-          [
-            null,
-            null,
+            "14:00",
+            "16:00",
             "真的杂谈"
-          ],
-          [
-            null,
-            null,
-            "电台来袭"
-          ],
-          [
-            null,
-            null,
-            "Diridis"
-          ],
-          [
-            null,
-            null,
-            "不上学好爽"
           ]
         ],
-        "THU": [],
-        "FRI": [],
-        "SAT": [],
-        "SUN": [
+        "THU": [
           [
-            null,
-            null,
-            "10时"
-          ],
+            "10:00",
+            "12:00",
+            "早台？！"
+          ]
+        ],
+        "FRI": [
           [
-            null,
-            null,
-            "2时"
-          ],
-          [
-            null,
-            null,
-            "待定"
-          ],
-          [
-            null,
-            null,
-            "行道树"
-          ],
-          [
-            null,
-            null,
+            "21:00",
+            "23:00",
             "纪录片"
           ]
-        ]
+        ],
+        "SAT": [
+          [
+            "21:00",
+            "23:00",
+            "行道树"
+          ]
+        ],
+        "SUN": []
       }
     },
     {
