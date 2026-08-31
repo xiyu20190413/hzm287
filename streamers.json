@@ -9,55 +9,13 @@
       "live": "https://b23.tv/0JAnyGj",
       "space": "https://b23.tv/3AHwUJ1",
       "schedule": {
-        "MON": [
-          [
-            null,
-            null,
-            "休"
-          ]
-        ],
-        "TUE": [
-          [
-            "15:00",
-            "17:00",
-            "直播"
-          ]
-        ],
-        "WED": [
-          [
-            "19:30",
-            "21:30",
-            "直播"
-          ]
-        ],
-        "THU": [
-          [
-            null,
-            null,
-            "待定"
-          ]
-        ],
-        "FRI": [
-          [
-            "21:00",
-            "23:00",
-            "直播"
-          ]
-        ],
-        "SAT": [
-          [
-            "19:00",
-            "21:00",
-            "直播"
-          ]
-        ],
-        "SUN": [
-          [
-            null,
-            null,
-            "待定"
-          ]
-        ]
+        "MON": [],
+        "TUE": [],
+        "WED": [],
+        "THU": [],
+        "FRI": [],
+        "SAT": [],
+        "SUN": []
       }
     },
     {
@@ -84,85 +42,12 @@
       "space": "https://b23.tv/UIq2wIL",
       "schedule": {
         "MON": [],
-        "TUE": [
-          [
-            null,
-            null,
-            "30"
-          ],
-          [
-            null,
-            null,
-            "wee"
-          ]
-        ],
-        "WED": [
-          [
-            null,
-            null,
-            "14时"
-          ],
-          [
-            null,
-            null,
-            "14时"
-          ],
-          [
-            null,
-            null,
-            "中V歌"
-          ],
-          [
-            null,
-            null,
-            "真的杂谈"
-          ],
-          [
-            null,
-            null,
-            "电台来袭"
-          ],
-          [
-            null,
-            null,
-            "Diridis"
-          ],
-          [
-            null,
-            null,
-            "不上学好爽"
-          ]
-        ],
+        "TUE": [],
+        "WED": [],
         "THU": [],
         "FRI": [],
         "SAT": [],
-        "SUN": [
-          [
-            null,
-            null,
-            "10时"
-          ],
-          [
-            null,
-            null,
-            "2时"
-          ],
-          [
-            null,
-            null,
-            "待定"
-          ],
-          [
-            null,
-            null,
-            "行道树"
-          ],
-          [
-            null,
-            null,
-            "纪录片"
-          ]
-        ]
+        "SUN": []
       }
     },
     {
